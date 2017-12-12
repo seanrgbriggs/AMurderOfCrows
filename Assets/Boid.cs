@@ -20,24 +20,26 @@ public class Boid : MonoBehaviour {
     public float separation;
     public float visionRadius;
     public float maxVelocity;
+    public bool shouldMove = true;
      
 	// Update is called once per frame
 	void Update () {
+        if (shouldMove) {
+            List<Boid> neighbors = getNeighbors();
+            List<Boid> flockNeighbors;
+            List<Boid> nonFlockNeighbors;
+            siftForFlock(neighbors, out flockNeighbors, out nonFlockNeighbors);
 
-        List<Boid> neighbors = getNeighbors();
-        List<Boid> flockNeighbors;
-        List<Boid> nonFlockNeighbors;
-        siftForFlock(neighbors, out flockNeighbors, out nonFlockNeighbors);
+            Vector2 flockVelocity = Vector2.zero;
+            flockVelocity += cohesion * cohesionVector(flockNeighbors).normalized;
+            flockVelocity += alignment * alignmentVector(flockNeighbors).normalized;
+            flockVelocity += separation * separationVector(neighbors).normalized;
 
-        Vector2 flockVelocity = Vector2.zero;
-        flockVelocity += cohesion * cohesionVector(flockNeighbors).normalized;
-        flockVelocity += alignment * alignmentVector(flockNeighbors).normalized;
-        flockVelocity += separation * separationVector(neighbors).normalized;
-        
-        rb.velocity += flockVelocity;
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
+            rb.velocity += flockVelocity;
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
 
-        transform.rotation = Quaternion.FromToRotation(Vector2.down, rb.velocity);
+            transform.rotation = Quaternion.FromToRotation(Vector2.down, rb.velocity);
+        }
     }
 
     //The force vector which makes boids of a feather flock together 

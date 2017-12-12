@@ -7,6 +7,7 @@ public class BoidSpawner : MonoBehaviour {
     public Boid boidPrefab;
     public float interval;
     float elapsed;
+    public bool shouldSpawn = true;
 
 	// Use this for initialization
 	void Start () {
@@ -16,7 +17,7 @@ public class BoidSpawner : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         elapsed += Time.deltaTime;
-        if(elapsed > interval)
+        if(elapsed > interval && shouldSpawn)
         {
             elapsed = 0;
 

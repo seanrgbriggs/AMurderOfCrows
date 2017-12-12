@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114145580062700602}
   m_Layer: 0
   m_Name: Boid
-  m_TagString: Untagged
+  m_TagString: Boid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rightX: 9.5
-  topY: 5.35
+  topY: 5
 --- !u!114 &114749472850182888
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,6 +95,7 @@ MonoBehaviour:
   separation: 1
   visionRadius: 1
   maxVelocity: 5
+  shouldMove: 1
 --- !u!212 &212086391700155370
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -104,6 +105,7 @@ SpriteRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -119,6 +121,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
