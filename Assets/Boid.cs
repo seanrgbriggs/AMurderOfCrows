@@ -13,6 +13,7 @@ public class Boid : MonoBehaviour {
     public BoidType flockID;
     public SpriteRenderer sr;
     public Rigidbody2D rb;
+    public int spawnNum;
 
     [Header("Flocking Values")]
     public float cohesion;
@@ -21,9 +22,10 @@ public class Boid : MonoBehaviour {
     public float visionRadius;
     public float maxVelocity;
     public bool shouldMove = true;
-     
-	// Update is called once per frame
-	void Update () {
+    public bool isDone = false;
+
+    // Update is called once per frame
+    void Update () {
         if (shouldMove) {
             List<Boid> neighbors = getNeighbors();
             List<Boid> flockNeighbors;

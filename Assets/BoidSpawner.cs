@@ -8,6 +8,7 @@ public class BoidSpawner : MonoBehaviour {
     public float interval;
     float elapsed;
     public bool shouldSpawn = true;
+    int spawned = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -20,8 +21,10 @@ public class BoidSpawner : MonoBehaviour {
         if(elapsed > interval && shouldSpawn)
         {
             elapsed = 0;
+            spawned++;
 
             Boid boid = Instantiate(boidPrefab, transform.position, Quaternion.identity);
+            boid.spawnNum = spawned;
 
             Boid.BoidType[] types = (Boid.BoidType[]) System.Enum.GetValues(typeof(Boid.BoidType));
             boid.flockID = types[Random.Range(0,types.Length)];

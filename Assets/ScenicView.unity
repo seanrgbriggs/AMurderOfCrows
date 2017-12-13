@@ -249,4 +249,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawner: {fileID: 448275765}
-  roomSize: 0.5
+  roomSize: 1
