@@ -103,6 +103,11 @@ MonoBehaviour:
   movePoints: 150
   playerID: 0
   keysCollected: 0
+  sprites:
+  - {fileID: 21300000, guid: 860961a974209be4395962b07c00208f, type: 3}
+  - {fileID: 21300000, guid: 2bf855eab45e37d47be1620c665a695a, type: 3}
+  - {fileID: 21300000, guid: fe53f69781b2c4e478f8636fde805b42, type: 3}
+  - {fileID: 21300000, guid: aa6cdc5b3fa29f745bcc33698908078b, type: 3}
 --- !u!212 &212937004662747996
 SpriteRenderer:
   m_ObjectHideFlags: 1

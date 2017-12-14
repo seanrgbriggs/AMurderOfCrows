@@ -54,6 +54,7 @@ public class Tile : MonoBehaviour {
     public void UpdateTile(TileType type)
     {
         this.type = type;
+        GetComponent<SpriteRenderer>().sprite = GameController.instance.getSpriteForTile(type);
         GetComponent<Collider2D>().enabled = type == TileType.Wall;
     }
 }

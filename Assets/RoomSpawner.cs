@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class RoomSpawner : MonoBehaviour {
 
+
+
     static float elapsed = 0;
+    public float timeToKillBoids = 15f;
     public int NUM_ROOMS = 16;
     public int NUM_PLAYERS = 4;
     public BoidSpawner spawner;
@@ -34,8 +37,9 @@ public class RoomSpawner : MonoBehaviour {
             spawner.shouldSpawn = false;
         }
 
-        if (elapsed >= 30 && roomsSpawned < NUM_ROOMS) {
+        if (elapsed >= timeToKillBoids && roomsSpawned < NUM_ROOMS) {
             SpawnRooms(boids);
+            CreateRooms();
         }
 
         if(roomsSpawned >= NUM_ROOMS && !playersSpawned) {
@@ -53,6 +57,7 @@ public class RoomSpawner : MonoBehaviour {
             float down = boids[i].transform.position.y - roomSize / 2;
 
             boids[i].GetComponent<Boid>().shouldMove = false;
+            boids[i].GetComponent<SpriteRenderer>().enabled = false;
 
             Vector3 pos = boids[i].transform.position;
             pos.x = Mathf.RoundToInt(pos.x);
@@ -77,14 +82,14 @@ public class RoomSpawner : MonoBehaviour {
 
                 float right = coordinates[i, 0] + roomSize;
                 float top = coordinates[i, 1] + roomSize;
-
+                /*
                 print("Top Left: " + left + ", " + top +
                 "    Top Right: " + right + ", " + top +
                 "    Bottom Right: " + right + ", " + down +
                 "    Bottom Left: " + left + ", " + down);
-
+                */
                 roomsSpawned++;
-                print(roomsSpawned + ", " + boids[i].GetComponent<Boid>().spawnNum);
+                //print(roomsSpawned + ", " + boids[i].GetComponent<Boid>().spawnNum);
             }
             else if(boids[i].GetComponent<Boid>().isDone == false){
                 //print("ding, " + boids[i].GetComponent<Boid>().spawnNum);
@@ -109,46 +114,130 @@ public class RoomSpawner : MonoBehaviour {
     }
 
 
-    public struct Room
+    public class Room
     {
-        public int topEdge, bottomEdge, leftEdge, rightEdge;
+        public Tile.TileType type;
+        public int x, y, size;
+        public bool canExpand;
         //left edge is x value of left wall
         //top edge is y value of top wall
 
-        public Room(int te, int be, int le, int re)
+        public Room(Tile.TileType type, int x, int y, int size)
         {
-            topEdge = te;
-            bottomEdge = be;
-            leftEdge = le;
-            rightEdge = re;
+            this.type = type;
+
+            this.x = x;
+            this.y = y;
+            this.size = size;
+
+            canExpand = true;
         }
     }
 
     void CreateRooms() {
-        /*
-            for each boid
-                create room at boid location
 
-            roomsCanExpand = true
-            while(roomsCanExpand)
-                roomsCanExpand = false
-                for each room
-                    if(canRoomExpandLeft)
-                        roomsCanExpand = true;
-                        ExpandRoomLeft
-                    if(canRoomExpandRight)
-                        roomsCanExpand = true;
-                        ExpandRoomRight
-                    if(canRoomExpandUp)
-                        roomsCanExpand = true;
-                        ExpandRoomUp
-                    if(canRoomExpandDown)
-                        roomsCanExpand = true;
-                        ExpandRoomDown
-        
+        TileManager tileManager = FindObjectOfType<TileManager>();
+        GameController gc = GameController.instance;
+
+        List<Room> rooms = new List<Room>();
+        foreach (Boid b in FindObjectsOfType<Boid>()) {
+            int x = Mathf.RoundToInt(b.transform.position.x);
+            int y = Mathf.RoundToInt(b.transform.position.y);
+            Tile.TileType tileType = gc.getTileForBoid(b.flockID);
+
+            rooms.Add(new Room(tileType, x, y, 1));
+
+            Tile t = tileManager.nearestToCoords(x, y);
+            if (t == null) {
+                rooms.RemoveAt(rooms.Count - 1);
+            }
+            else {
+                t.UpdateTile(tileType);
+            }
+        }
+
+        for (int i = 0; i < rooms.Count; i++) {
+            List<Tile> nextExpansion = new List<Tile>();
+
+            Room curRoom = rooms[i];
+
+            if (!curRoom.canExpand) {
+                continue;
+            }
+
+            //curRoom.size++;
+
+            for (int x = -2; x <= 2; x++) {
+                for (int y = -2; y <= 2; y++) {
+                    Tile nextTile = tileManager.nearestToCoords(curRoom.x + x, curRoom.y + y);
+                    if (nextTile != null && (nextTile.type == Tile.TileType.Grass || nextTile.type == Tile.TileType.Wall)) {
+                        nextTile.UpdateTile(curRoom.type);
+                    }
+                }
+            }
+            for (int x = -3; x <= 3; x ++) {
+                for (int y = -3; y <= 3; y ++) {
+                    Tile nextTile = tileManager.nearestToCoords(curRoom.x + x, curRoom.y + y);
+                    if (nextTile != null && nextTile.type == Tile.TileType.Grass) {
+                        nextTile.UpdateTile(Tile.TileType.Wall);
+                    }
+                }
+            }
+
+            //    for (int x = -curRoom.size; x < curRoom.size; x++) {
+            //        for (int y = -curRoom.size; y <= curRoom.size; y += curRoom.size) {
+
+            //            Tile nextTile = tileManager.nearestToCoords(curRoom.x + x, curRoom.y + curRoom.size);
+            //            if (nextTile == null) {
+            //                curRoom.canExpand = false;
+            //            }
+            //            else if (nextTile.type != Tile.TileType.Grass) {
+            //                curRoom.canExpand = false;
+            //                nextTile.UpdateTile(Tile.TileType.Wall);
+            //            }
+            //            else {
+            //                nextExpansion.Add(nextTile);
+            //            }
+            //        }
+            //    }
+
+            //    if (curRoom.canExpand) {
+            //        foreach(Tile t in nextExpansion) {
+            //            t.UpdateTile(Tile.TileType.Wall);
+            //        }
+            //        continue;
+            //    }
+            //    else {
+            //        foreach(Tile t in nextExpansion) {
+            //            t.UpdateTile(curRoom.type);
+            //        }
+            //    }
+            //}
+            /*
+                for each boid
+                    create room at boid location
+
+                roomsCanExpand = true
+                while(roomsCanExpand)
+                    roomsCanExpand = false
+                    for each room
+                        if(canRoomExpandLeft)
+                            roomsCanExpand = true;
+                            ExpandRoomLeft
+                        if(canRoomExpandRight)
+                            roomsCanExpand = true;
+                            ExpandRoomRight
+                        if(canRoomExpandUp)
+                            roomsCanExpand = true;
+                            ExpandRoomUp
+                        if(canRoomExpandDown)
+                            roomsCanExpand = true;
+                            ExpandRoomDown
 
 
-         */
+
+             */
+        }
     }
 
     bool canRoomExpandLeft(Room room) {

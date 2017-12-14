@@ -223,7 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boidPrefab: {fileID: 114749472850182888, guid: 88404e12de4fd574b8f93111241adb28,
     type: 2}
-  interval: 0
+  interval: 0.1
   shouldSpawn: 1
 --- !u!4 &448275766
 Transform:
@@ -249,7 +249,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69ca45f30fa38ba46bef8677b90195cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NUM_ROOMS: 16
+  timeToKillBoids: 15
+  NUM_ROOMS: 24
   NUM_PLAYERS: 4
   spawner: {fileID: 448275765}
   roomSize: 1
@@ -257,6 +258,11 @@ MonoBehaviour:
   playerTemp: {fileID: 114830343422912422, guid: bc876513014c17c4fba7c6779726f26c,
     type: 2}
   keyTemp: {fileID: 114259702439883352, guid: dc644b40aea7fc94cb50c79d9c6c6ee2, type: 2}
+  keySprites:
+  - {fileID: 21300000, guid: 070eea782ef0b2d45ad0ecf7d6cbb80f, type: 3}
+  - {fileID: 21300000, guid: 28e701799812b854ab8c3d92e099a3f3, type: 3}
+  - {fileID: 21300000, guid: bf37c90e450e9294ca5562963e71448b, type: 3}
+  - {fileID: 21300000, guid: 34af5cf80139a194793014996ce0da59, type: 3}
 --- !u!114 &448275768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,6 +276,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players: []
   currentPlayerIndex: 0
+  colorTileDictionary:
+  - boidType: 0
+    tileType: 0
+    tileSprite: {fileID: 21300000, guid: d9491b9c2c42aae4da0cb63e7a1ab4c0, type: 3}
+  - boidType: 0
+    tileType: 2
+    tileSprite: {fileID: 21300000, guid: ad761b67c5ff16e4e8f974c42afe91f7, type: 3}
+  - boidType: 0
+    tileType: 3
+    tileSprite: {fileID: 21300000, guid: d5c4154234f06f2488ac1c5fd18e8b38, type: 3}
+  - boidType: 0
+    tileType: 4
+    tileSprite: {fileID: 21300000, guid: eb56914fc1992304c883515b32d961d2, type: 3}
+  - boidType: 0
+    tileType: 5
+    tileSprite: {fileID: 21300000, guid: 670c5d0ebd5eb6646b6ed16e6eb577bf, type: 3}
 --- !u!1 &878820968
 GameObject:
   m_ObjectHideFlags: 0

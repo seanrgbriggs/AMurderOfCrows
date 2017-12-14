@@ -74,7 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad2958b27f3de4389e24576984e54f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightX: 28
+  rightX: 27
   topY: 14
 --- !u!114 &114749472850182888
 MonoBehaviour:
@@ -91,9 +91,9 @@ MonoBehaviour:
   sr: {fileID: 212086391700155370}
   rb: {fileID: 50605480967457934}
   spawnNum: 0
-  cohesion: 2.9
+  cohesion: 3.4
   alignment: 1
-  separation: 3
+  separation: 3.68
   visionRadius: 10
   maxVelocity: 5
   shouldMove: 1

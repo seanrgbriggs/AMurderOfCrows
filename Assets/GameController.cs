@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour {
 
+    [System.Serializable]
+    public class BoidColorTileMatch {
+        public Boid.BoidType boidType;
+        public Tile.TileType tileType;
+        public Sprite tileSprite;
+    }
+
     public static GameController instance;
 
     public List<Player> players;
     public int currentPlayerIndex = -1;
+    public List<BoidColorTileMatch> colorTileDictionary;
 
     public Player currentPlayer
     {
@@ -21,9 +29,19 @@ public class GameController : MonoBehaviour {
         }
     }
 
+    void Awake() {
+        instance = this;
+    }
+
 	// Use this for initialization
 	void Start () {
-        instance = this;	
+        List<Boid.BoidType> boidTypes = new List<Boid.BoidType>((Boid.BoidType[]) System.Enum.GetValues(typeof(Boid.BoidType)));
+        for(int i = 0; i < colorTileDictionary.Count; i++) {
+            int randomIndex = Random.Range(0, boidTypes.Count);
+            colorTileDictionary[i].boidType = boidTypes[randomIndex];
+            boidTypes.RemoveAt(randomIndex);
+        }
+
 	}
 	
 	// Update is called once per frame
@@ -33,14 +51,13 @@ public class GameController : MonoBehaviour {
                 AdvanceTurn();
             }
 
-            Camera.main.transform.position = players[currentPlayerIndex].transform.position + new Vector3(0, 0, -10);
-            Camera.main.orthographicSize = 7.5F;
+            //Camera.main.transform.position = players[currentPlayerIndex].transform.position + new Vector3(0, 0, -10);
+            //Camera.main.orthographicSize = 7.5F;
         }
 	}
 
 
     public void AdvanceTurn() {
-        print("Advancing Turn");
         players[currentPlayerIndex].movePoints = 150;
         players[currentPlayerIndex].GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
@@ -50,5 +67,16 @@ public class GameController : MonoBehaviour {
         else {
             currentPlayerIndex++;
         }
+    }
+
+    public Tile.TileType getTileForBoid(Boid.BoidType boidType) {
+        BoidColorTileMatch bctm = colorTileDictionary.Find(match => match.boidType == boidType);
+        return bctm.tileType;
+    }
+
+    public Sprite getSpriteForTile(Tile.TileType tileType) {
+        BoidColorTileMatch bctm = colorTileDictionary.Find(match => match.tileType == tileType);
+
+        return (bctm == null) ? null: bctm.tileSprite;
     }
 }

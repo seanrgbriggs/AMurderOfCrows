@@ -28,8 +28,9 @@ public class TileManager : MonoBehaviour {
     public Tile nearestToCoords(int x, int y)
     {
         int deltaX = x - Mathf.RoundToInt(transform.position.x);
-        int deltaY = y - Mathf.RoundToInt(transform.position.y);
-        
+        int deltaY = Mathf.RoundToInt(transform.position.y) - y;
+
+
         if(deltaX < 0 || deltaX >= width || deltaY < 0 || deltaY >= height)
         {
             return null;

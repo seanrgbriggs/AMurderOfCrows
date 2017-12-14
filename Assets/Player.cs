@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
     public int movePoints = 150;
     public int playerID = 0;
     public int keysCollected = 0;
+    public Sprite[] sprites;
 
 	// Use this for initialization
 	void Start () {		
@@ -37,6 +38,17 @@ public class Player : MonoBehaviour {
         if (vertical != 0 || horizontal != 0) {
             movePoints--;
         }
+
+        if(horizontal == -1) {
+            GetComponent<SpriteRenderer>().sprite = sprites[1];
+        } else if (horizontal == 1) {
+            GetComponent<SpriteRenderer>().sprite = sprites[2];
+        } else if (vertical == 1) {
+            GetComponent<SpriteRenderer>().sprite = sprites[3];
+        } else {
+            GetComponent<SpriteRenderer>().sprite = sprites[0];
+        }
+
         GetComponent<Rigidbody2D>().velocity = 3 * ((Vector2.up * vertical) + (Vector2.right * horizontal));
     }
 
