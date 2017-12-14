@@ -23,11 +23,20 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+        instance = this;	
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	    	
 	}
+
+    public void AdvanceTurn() {
+        if(currentPlayerIndex == players.Count - 1) {
+            currentPlayerIndex = 0;
+        }
+        else {
+            currentPlayerIndex++;
+        }
+    }
 }

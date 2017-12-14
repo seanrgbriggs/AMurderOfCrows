@@ -202,8 +202,9 @@ GameObject:
   - component: {fileID: 448275766}
   - component: {fileID: 448275765}
   - component: {fileID: 448275767}
+  - component: {fileID: 448275768}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -248,5 +249,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69ca45f30fa38ba46bef8677b90195cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NUM_ROOMS: 16
+  NUM_PLAYERS: 4
   spawner: {fileID: 448275765}
-  roomSize: 1
+  roomSize: 1.5
+  playerTemp: {fileID: 114830343422912422, guid: bc876513014c17c4fba7c6779726f26c,
+    type: 2}
+--- !u!114 &448275768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 448275764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd6046a92295f944971fefb7d1133df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
+  currentPlayerIndex: 0

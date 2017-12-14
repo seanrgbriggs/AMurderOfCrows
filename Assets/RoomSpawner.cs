@@ -5,13 +5,18 @@ using UnityEngine;
 public class RoomSpawner : MonoBehaviour {
 
     static float elapsed = 0;
+    public int NUM_ROOMS = 16;
+    public int NUM_PLAYERS = 4;
     public BoidSpawner spawner;
     public float roomSize;
     static int roomsSpawned = 0;
-    float[,] coordinates = new float[16, 2];
+    float[,] coordinates;
+    bool playersSpawned = false;
+    public Player playerTemp;
 
     // Use this for initialization
     void Start () {
+        coordinates = new float[NUM_ROOMS, 2];
     }
 	
 	// Update is called once per frame
@@ -19,21 +24,24 @@ public class RoomSpawner : MonoBehaviour {
         elapsed += Time.deltaTime;
 
         GameObject[] boids = GameObject.FindGameObjectsWithTag("Boid");
+        System.Array.Sort(boids, (x, y) => x.GetComponent<Boid>().spawnNum.CompareTo(y.GetComponent<Boid>().spawnNum));
 
-        if(boids.Length >= 16) {
+        if (boids.Length >= NUM_ROOMS) {
             spawner.shouldSpawn = false;
         }
 
-        if (elapsed >= 30 && roomsSpawned < 16) {
+        if (elapsed >= 30 && roomsSpawned < NUM_ROOMS) {
             SpawnRooms(boids);
+        }
+
+        if(roomsSpawned >= NUM_ROOMS && !playersSpawned) {
+            SpawnPlayers(boids);
         }
     }
 
     //IDEA: Have the boid keep moving if it would overlap with other rooms.  
     void SpawnRooms(GameObject[] boids) {
-        System.Array.Sort(boids, (x, y) => x.GetComponent<Boid>().spawnNum.CompareTo(y.GetComponent<Boid>().spawnNum));
-
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < NUM_ROOMS; i++) {
             bool overlaps = false;
 
             float left = boids[i].transform.position.x - roomSize / 2;
@@ -41,7 +49,7 @@ public class RoomSpawner : MonoBehaviour {
 
             boids[i].GetComponent<Boid>().shouldMove = false;
 
-            for (int j = 0; j < 16; j++) {
+            for (int j = 0; j < NUM_ROOMS; j++) {
                 if(coordinates[j, 0] != 0 && !(left > coordinates[j, 0] + roomSize || 
                                                   left + roomSize < coordinates[j, 0] ||
                                                   down > coordinates[j, 1] + roomSize ||
@@ -71,6 +79,15 @@ public class RoomSpawner : MonoBehaviour {
                 print("ding, " + boids[i].GetComponent<Boid>().spawnNum);
                 //boids[i].GetComponent<Rigidbody2D>().velocity = Vector2.down;
             }
+        }
+    }
+
+    void SpawnPlayers(GameObject[] boids) {
+        playersSpawned = true;
+        for (int i = 0; i < NUM_PLAYERS; i++) {
+            Player player = Instantiate(playerTemp, boids[i].transform.position, Quaternion.identity);
+            player.playerID = i;
+            GameController.instance.players.Add(player);
         }
     }
 }
