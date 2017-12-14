@@ -27,7 +27,8 @@ public class BoidSpawner : MonoBehaviour {
             boid.spawnNum = spawned;
 
             Boid.BoidType[] types = (Boid.BoidType[]) System.Enum.GetValues(typeof(Boid.BoidType));
-            boid.flockID = types[Random.Range(0,types.Length)];
+
+            boid.flockID = types[Random.Range(0,types.Length-1)];
             switch (boid.flockID)
             {
                 case Boid.BoidType.Black:
