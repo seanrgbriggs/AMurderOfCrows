@@ -108,21 +108,71 @@ public class RoomSpawner : MonoBehaviour {
         
     }
 
-    void CreateRooms() { 
-        //create 1*1 rooms at each Boid's position
 
-        //expand rooms until they can't expand any more
-        //expand room up if possible
+    public struct Room
+    {
+        public int topEdge, bottomEdge, leftEdge, rightEdge;
+        //left edge is x value of left wall
+        //top edge is y value of top wall
 
-        //expand room down if possible
+        public Room(int te, int be, int le, int re)
+        {
+            topEdge = te;
+            bottomEdge = be;
+            leftEdge = le;
+            rightEdge = re;
+        }
+    }
 
-        //expand room left if possible
+    void CreateRooms() {
+        /*
+            for each boid
+                create room at boid location
 
-        //expand room right if possible
+            roomsCanExpand = true
+            while(roomsCanExpand)
+                roomsCanExpand = false
+                for each room
+                    if(canRoomExpandLeft)
+                        roomsCanExpand = true;
+                        ExpandRoomLeft
+                    if(canRoomExpandRight)
+                        roomsCanExpand = true;
+                        ExpandRoomRight
+                    if(canRoomExpandUp)
+                        roomsCanExpand = true;
+                        ExpandRoomUp
+                    if(canRoomExpandDown)
+                        roomsCanExpand = true;
+                        ExpandRoomDown
+        
 
-        //rooms are finalized when they can no longer expand
 
-        //if rooms share walls
-        //select a random section of shared wall and place door
+         */
+    }
+
+    bool canRoomExpandLeft(Room room) {
+        /*
+            int x = room.leftEdge - 1;
+            int y = room.topEdge;
+
+            while(y <= room.bottomEdge)
+                if(world(x, y).isNotEmpty)
+                    return false;
+         */
+
+        return true;
+    }
+
+    void expandRoomLeft(Room room) {
+        /*
+            int x = room.leftEdge - 1;
+            int y = room.topEdge;
+
+            while(y <= room.bottomEdge)
+                world(x, y) = room
+
+            room.leftEdge += 1;
+         */
     }
 }
