@@ -74,7 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad2958b27f3de4389e24576984e54f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightX: 27
+  rightX: 26
   topY: 14
 --- !u!114 &114749472850182888
 MonoBehaviour:

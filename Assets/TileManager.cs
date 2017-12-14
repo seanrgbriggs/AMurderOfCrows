@@ -11,20 +11,63 @@ public class TileManager : MonoBehaviour {
 
     [HideInInspector]
     public Tile[,] tiles;
+    public Tile.TileType[,] origTiles;
 
-	// Use this for initialization
-	void Start () {
+    public static TileManager instance;
+
+    void Awake() {
+        instance = this;
+    }
+
+    // Use this for initialization
+    void Start () {
         tiles = new Tile[width, height];
-		for(int i = 0; i < width; i++)
+        origTiles = new Tile.TileType[width, height];
+        for (int i = 0; i < width; i++)
         {
             for(int j = 0; j < height; j++)
             {
                 tiles[i, j] = Instantiate(tilePrefab, transform.position + (Vector3.right * i + Vector3.down * j) * delta, Quaternion.identity, transform);
             }
         }
-	}
+    }
 	
-	
+
+	public void UpdateTiles() {
+        ResetTiles();
+
+        Player player = GameController.instance.currentPlayer;
+        int x = Mathf.RoundToInt(player.transform.position.x);
+        int y = Mathf.RoundToInt(player.transform.position.y);
+
+        Tile.TileType playerType = nearestToCoords(x, y).type;
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Tile.TileType type = tiles[i, j].type;
+                if (type != playerType && type != Tile.TileType.Wall) {
+                    tiles[i, j].UpdateTile(Tile.TileType.Blank);
+                }
+            }
+        }
+    }
+
+    public void ResetTiles() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                tiles[i, j].UpdateTile(origTiles[i, j]);
+            }
+        }
+    }
+
+    public void SetTiles() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                origTiles[i, j] = tiles[i, j].type;
+            }
+        }
+    }
+
     public Tile nearestToCoords(int x, int y)
     {
         int deltaX = x - Mathf.RoundToInt(transform.position.x);

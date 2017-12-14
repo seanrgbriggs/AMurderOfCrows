@@ -135,6 +135,7 @@ public class RoomSpawner : MonoBehaviour {
     }
 
     void CreateRooms() {
+        roomsSpawned = 0;
 
         TileManager tileManager = FindObjectOfType<TileManager>();
         GameController gc = GameController.instance;
@@ -155,64 +156,69 @@ public class RoomSpawner : MonoBehaviour {
                 t.UpdateTile(tileType);
             }
         }
+        while (roomsSpawned < NUM_ROOMS) {
+            for (int i = 0; i < rooms.Count; i++) {
+                List<Tile> nextExpansion = new List<Tile>();
 
-        for (int i = 0; i < rooms.Count; i++) {
-            List<Tile> nextExpansion = new List<Tile>();
+                Room curRoom = rooms[i];
 
-            Room curRoom = rooms[i];
+                if (!curRoom.canExpand) {
+                    continue;
+                }
 
-            if (!curRoom.canExpand) {
-                continue;
-            }
+                /*
+                for (int x = -2; x <= 2; x++) {
+                    for (int y = -2; y <= 2; y++) {
+                        Tile nextTile = tileManager.nearestToCoords(curRoom.x + x, curRoom.y + y);
+                        if (nextTile != null && (nextTile.type == Tile.TileType.Grass || nextTile.type == Tile.TileType.Wall)) {
+                            nextTile.UpdateTile(curRoom.type);
+                        }
+                    }
+                }
+                for (int x = -3; x <= 3; x ++) {
+                    for (int y = -3; y <= 3; y ++) {
+                        Tile nextTile = tileManager.nearestToCoords(curRoom.x + x, curRoom.y + y);
+                        if (nextTile != null && nextTile.type == Tile.TileType.Grass) {
+                            nextTile.UpdateTile(Tile.TileType.Wall);
+                        }
+                    }
+                }*/
+                nextExpansion.Clear();
+                for (int x = -curRoom.size; x <= curRoom.size; x++) {
+                    for (int y = -curRoom.size; y <= curRoom.size; y++) {
+                        if (y == -curRoom.size || y == curRoom.size || x == -curRoom.size || x == curRoom.size) {
+                            Tile nextTile = tileManager.nearestToCoords(curRoom.x + x, curRoom.y + y);
+                            if (nextTile == null) {
+                                curRoom.canExpand = false;
+                            }
+                            else if (nextTile.type != Tile.TileType.Grass) {
+                                curRoom.canExpand = false;
+                                nextExpansion.Add(nextTile);
+                                //nextTile.UpdateTile(Tile.TileType.Wall);
+                            }
+                            else {
+                                nextExpansion.Add(nextTile);
+                            }
+                        }
+                    }
+                }
 
-            //curRoom.size++;
-
-            for (int x = -2; x <= 2; x++) {
-                for (int y = -2; y <= 2; y++) {
-                    Tile nextTile = tileManager.nearestToCoords(curRoom.x + x, curRoom.y + y);
-                    if (nextTile != null && (nextTile.type == Tile.TileType.Grass || nextTile.type == Tile.TileType.Wall)) {
-                        nextTile.UpdateTile(curRoom.type);
+                if (!curRoom.canExpand) {
+                    foreach (Tile t in nextExpansion) {
+                        if (t.type == Tile.TileType.Grass) {
+                            t.UpdateTile(Tile.TileType.Wall);
+                        }
+                    }
+                    roomsSpawned++;
+                    continue;
+                }
+                else {
+                    curRoom.size++;
+                    foreach (Tile t in nextExpansion) {
+                        t.UpdateTile(curRoom.type);
                     }
                 }
             }
-            for (int x = -3; x <= 3; x ++) {
-                for (int y = -3; y <= 3; y ++) {
-                    Tile nextTile = tileManager.nearestToCoords(curRoom.x + x, curRoom.y + y);
-                    if (nextTile != null && nextTile.type == Tile.TileType.Grass) {
-                        nextTile.UpdateTile(Tile.TileType.Wall);
-                    }
-                }
-            }
-
-            //    for (int x = -curRoom.size; x < curRoom.size; x++) {
-            //        for (int y = -curRoom.size; y <= curRoom.size; y += curRoom.size) {
-
-            //            Tile nextTile = tileManager.nearestToCoords(curRoom.x + x, curRoom.y + curRoom.size);
-            //            if (nextTile == null) {
-            //                curRoom.canExpand = false;
-            //            }
-            //            else if (nextTile.type != Tile.TileType.Grass) {
-            //                curRoom.canExpand = false;
-            //                nextTile.UpdateTile(Tile.TileType.Wall);
-            //            }
-            //            else {
-            //                nextExpansion.Add(nextTile);
-            //            }
-            //        }
-            //    }
-
-            //    if (curRoom.canExpand) {
-            //        foreach(Tile t in nextExpansion) {
-            //            t.UpdateTile(Tile.TileType.Wall);
-            //        }
-            //        continue;
-            //    }
-            //    else {
-            //        foreach(Tile t in nextExpansion) {
-            //            t.UpdateTile(curRoom.type);
-            //        }
-            //    }
-            //}
             /*
                 for each boid
                     create room at boid location
@@ -238,6 +244,7 @@ public class RoomSpawner : MonoBehaviour {
 
              */
         }
+        tileManager.SetTiles();
     }
 
     bool canRoomExpandLeft(Room room) {

@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lightRange: 5
-  movePoints: 150
+  movePoints: 225
   playerID: 0
   keysCollected: 0
   sprites:

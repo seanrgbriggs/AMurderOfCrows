@@ -47,12 +47,13 @@ public class GameController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (GetComponent<RoomSpawner>().playersSpawned) {
+
             if (players[currentPlayerIndex].movePoints <= 0 || Input.GetKeyDown(KeyCode.Space)) {
                 AdvanceTurn();
             }
 
-            //Camera.main.transform.position = players[currentPlayerIndex].transform.position + new Vector3(0, 0, -10);
-            //Camera.main.orthographicSize = 7.5F;
+            Camera.main.transform.position = players[currentPlayerIndex].transform.position + new Vector3(0, 0, -10);
+            Camera.main.orthographicSize = 2.5F;
         }
 	}
 
@@ -67,6 +68,8 @@ public class GameController : MonoBehaviour {
         else {
             currentPlayerIndex++;
         }
+
+        TileManager.instance.UpdateTiles();
     }
 
     public Tile.TileType getTileForBoid(Boid.BoidType boidType) {

@@ -7,7 +7,7 @@ public class Tile : MonoBehaviour {
 
     public enum TileType
     {
-        Dirt, Grass, Cobblestone, Brick, Wood, Metal, Wall
+        Dirt, Grass, Cobblestone, Brick, Wood, Metal, Wall, Blank
     }
 
     public TileType type;
@@ -20,6 +20,7 @@ public class Tile : MonoBehaviour {
     public Sprite wood;
     public Sprite metal;
     public Sprite wall;
+    public Sprite blank;
 
 
     public bool isNavigable

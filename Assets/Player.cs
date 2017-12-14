@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
 
     public int lightRange = 5;
-    public int movePoints = 150;
+    public int movePoints = 225;
     public int playerID = 0;
     public int keysCollected = 0;
     public Sprite[] sprites;
@@ -16,8 +17,8 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        float vertical = 0;
-        float horizontal = 0;
+        int vertical = 0;
+        int horizontal = 0;
 
         if (Input.GetKey(KeyCode.UpArrow)) vertical = 1;
         if (Input.GetKey(KeyCode.DownArrow)) vertical = -1;
@@ -34,11 +35,7 @@ public class Player : MonoBehaviour {
         
     }
 
-    void AttemptMove(float vertical, float horizontal) {
-        if (vertical != 0 || horizontal != 0) {
-            movePoints--;
-        }
-
+    void AttemptMove(int vertical, int horizontal) {
         if(horizontal == -1) {
             GetComponent<SpriteRenderer>().sprite = sprites[1];
         } else if (horizontal == 1) {
@@ -49,7 +46,16 @@ public class Player : MonoBehaviour {
             GetComponent<SpriteRenderer>().sprite = sprites[0];
         }
 
-        GetComponent<Rigidbody2D>().velocity = 3 * ((Vector2.up * vertical) + (Vector2.right * horizontal));
+        if((transform.position.x >= 26 && horizontal == 1) || (transform.position.x <= -26 && horizontal == -1)) {
+            horizontal = 0;
+        }
+        if ((transform.position.y >= 14 && vertical == 1) || (transform.position.y <= -14 && vertical == -1)) {
+            vertical = 0;
+        }
+
+        movePoints -= Math.Abs(vertical) + Math.Abs(horizontal);
+
+        GetComponent<Rigidbody2D>().velocity = 2 * ((Vector2.up * vertical) + (Vector2.right * horizontal));
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
