@@ -40,7 +40,7 @@ public class Boid : MonoBehaviour {
             rb.velocity += flockVelocity;
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
 
-            transform.rotation = Quaternion.FromToRotation(Vector2.down, rb.velocity);
+            transform.rotation = Quaternion.FromToRotation(Vector2.up + Vector2.left, rb.velocity);
         }
     }
 
@@ -64,12 +64,12 @@ public class Boid : MonoBehaviour {
         if (neighbors.Count == 0)
             return rb.velocity;
 
-        Vector2 averageVelocity = rb.velocity; //The average velocity of the flock
+        Vector2 averageVelocity = Vector2.zero; //The average velocity of the flock
         foreach(Boid boid in neighbors)
         {
             averageVelocity += boid.rb.velocity;
         }
-        averageVelocity /= neighbors.Count + 1;
+        averageVelocity /= neighbors.Count;
 
         return averageVelocity;// - rb.velocity;
     }
