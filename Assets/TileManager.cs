@@ -5,9 +5,9 @@ using UnityEngine;
 public class TileManager : MonoBehaviour {
 
     public Tile tilePrefab;
-    public int width;
-    public int height;
-    public float delta;
+    public int width = 17;
+    public int height = 9;
+    public float delta = 1;
 
     [HideInInspector]
     public Tile[,] tiles;
@@ -19,7 +19,7 @@ public class TileManager : MonoBehaviour {
         {
             for(int j = 0; j < height; j++)
             {
-                tiles[i, j] = Instantiate(tilePrefab, transform.position + (Vector3.right * i + Vector3.down * j) * delta, Quaternion.identity);
+                tiles[i, j] = Instantiate(tilePrefab, transform.position + (Vector3.right * i + Vector3.down * j) * delta, Quaternion.identity, transform);
             }
         }
 	}
