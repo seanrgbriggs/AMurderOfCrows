@@ -32,6 +32,9 @@ public class GameController : MonoBehaviour {
             if (players[currentPlayerIndex].movePoints <= 0 || Input.GetKeyDown(KeyCode.Space)) {
                 AdvanceTurn();
             }
+
+            Camera.main.transform.position = players[currentPlayerIndex].transform.position + new Vector3(0, 0, -10);
+            Camera.main.orthographicSize = 7.5F;
         }
 	}
 
@@ -47,8 +50,5 @@ public class GameController : MonoBehaviour {
         else {
             currentPlayerIndex++;
         }
-
-        //Camera.main.transform.position = players[currentPlayerIndex].transform.position + new Vector3(0, 0, -10);
-        //Camera.main.orthographicSize = 2.5F;
     }
 }

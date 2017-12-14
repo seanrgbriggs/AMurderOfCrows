@@ -164,7 +164,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -257,6 +257,11 @@ MonoBehaviour:
   playerTemp: {fileID: 114830343422912422, guid: bc876513014c17c4fba7c6779726f26c,
     type: 2}
   keyTemp: {fileID: 114259702439883352, guid: dc644b40aea7fc94cb50c79d9c6c6ee2, type: 2}
+  keySprites:
+  - {fileID: 21300000, guid: 070eea782ef0b2d45ad0ecf7d6cbb80f, type: 3}
+  - {fileID: 21300000, guid: 28e701799812b854ab8c3d92e099a3f3, type: 3}
+  - {fileID: 21300000, guid: bf37c90e450e9294ca5562963e71448b, type: 3}
+  - {fileID: 21300000, guid: 34af5cf80139a194793014996ce0da59, type: 3}
 --- !u!114 &448275768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,3 +275,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players: []
   currentPlayerIndex: 0
+  hudTemp: {fileID: 114670999317410542, guid: 912fec79d6ec1b94fb176ed6a70b51ae, type: 2}

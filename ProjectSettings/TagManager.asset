@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Boid
   - Key
+  - HUD
   layers:
   - Default
   - TransparentFX

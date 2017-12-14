@@ -15,6 +15,9 @@ public class RoomSpawner : MonoBehaviour {
     public Player playerTemp;
     public Key keyTemp;
 
+    //Sprites
+    public Sprite[] keySprites;
+
     // Use this for initialization
     void Start () {
         coordinates = new float[NUM_ROOMS, 2];
@@ -92,8 +95,10 @@ public class RoomSpawner : MonoBehaviour {
             GameController.instance.players.Add(player);
         }
 
-        for (int i = NUM_PLAYERS; i < NUM_PLAYERS + 4; i++) {
-            Key key = Instantiate(keyTemp, boids[i].transform.position, Quaternion.identity);
+        for(int i = 0; i < 4; i++) {
+            Key key = Instantiate(keyTemp, boids[NUM_PLAYERS + i].transform.position, Quaternion.identity);
+            key.GetComponent<SpriteRenderer>().sprite = keySprites[i];
         }
+        
     }
 }
