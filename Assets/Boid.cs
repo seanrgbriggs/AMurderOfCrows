@@ -71,7 +71,7 @@ public class Boid : MonoBehaviour {
         }
         averageVelocity /= neighbors.Count + 1;
 
-        return averageVelocity - rb.velocity;
+        return averageVelocity;// - rb.velocity;
     }
 
     //The force vector which makes boids care about personal space
