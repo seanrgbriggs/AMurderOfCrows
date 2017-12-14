@@ -7,16 +7,26 @@ public class Tile : MonoBehaviour {
 
     public enum TileType
     {
-        Floor, Wall
+        Dirt, Grass, Cobblestone, Brick, Wood, Metal, Wall
     }
 
     public TileType type;
     public SpriteRenderer sr;
+    [Header("Sprites")]
+    public Sprite dirt;
+    public Sprite grass;
+    public Sprite cobble;
+    public Sprite brick;
+    public Sprite wood;
+    public Sprite metal;
+    public Sprite wall;
+
+
     public bool isNavigable
     {
         get
         {
-            return type == TileType.Floor;
+            return type != TileType.Wall;
         }
     }
     
@@ -39,5 +49,11 @@ public class Tile : MonoBehaviour {
     private int ManhattanFrom(Vector2 position)
     {
         return Mathf.FloorToInt(Mathf.Abs(position.x - transform.position.x) + Mathf.Abs(position.y - transform.position.y));
+    }
+
+    public void UpdateTile(TileType type)
+    {
+        this.type = type;
+        GetComponent<Collider2D>().enabled = type == TileType.Wall;
     }
 }

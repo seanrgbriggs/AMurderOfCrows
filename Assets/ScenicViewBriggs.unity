@@ -223,7 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boidPrefab: {fileID: 114749472850182888, guid: 88404e12de4fd574b8f93111241adb28,
     type: 2}
-  interval: 0.35
+  interval: 0
   shouldSpawn: 1
 --- !u!4 &448275766
 Transform:
@@ -253,14 +253,10 @@ MonoBehaviour:
   NUM_PLAYERS: 4
   spawner: {fileID: 448275765}
   roomSize: 1
+  playersSpawned: 0
   playerTemp: {fileID: 114830343422912422, guid: bc876513014c17c4fba7c6779726f26c,
     type: 2}
-  tileSprites:
-  - {fileID: 21300000, guid: d5c4154234f06f2488ac1c5fd18e8b38, type: 3}
-  - {fileID: 21300000, guid: ad761b67c5ff16e4e8f974c42afe91f7, type: 3}
-  - {fileID: 21300000, guid: 670c5d0ebd5eb6646b6ed16e6eb577bf, type: 3}
-  - {fileID: 21300000, guid: eb56914fc1992304c883515b32d961d2, type: 3}
-  - {fileID: 21300000, guid: d9491b9c2c42aae4da0cb63e7a1ab4c0, type: 3}
+  keyTemp: {fileID: 114259702439883352, guid: dc644b40aea7fc94cb50c79d9c6c6ee2, type: 2}
 --- !u!114 &448275768
 MonoBehaviour:
   m_ObjectHideFlags: 0

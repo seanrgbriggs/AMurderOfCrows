@@ -54,6 +54,12 @@ public class RoomSpawner : MonoBehaviour {
 
             boids[i].GetComponent<Boid>().shouldMove = false;
 
+            Vector3 pos = boids[i].transform.position;
+            pos.x = Mathf.RoundToInt(pos.x);
+            pos.y = Mathf.RoundToInt(pos.y);
+            boids[i].transform.position = pos;
+
+
             for (int j = 0; j < NUM_ROOMS; j++) {
                 if(coordinates[j, 0] != 0 && !(left >= coordinates[j, 0] + roomSize || 
                                                   left + roomSize <= coordinates[j, 0] ||
