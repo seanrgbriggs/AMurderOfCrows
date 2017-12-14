@@ -28,11 +28,20 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    	
+        if (GetComponent<RoomSpawner>().playersSpawned) {
+            if (players[currentPlayerIndex].movePoints <= 0 || Input.GetKeyDown(KeyCode.Space)) {
+                AdvanceTurn();
+            }
+        }
 	}
 
+
     public void AdvanceTurn() {
-        if(currentPlayerIndex == players.Count - 1) {
+        print("Advancing Turn");
+        players[currentPlayerIndex].movePoints = 150;
+        players[currentPlayerIndex].GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
+        if (currentPlayerIndex == players.Count - 1) {
             currentPlayerIndex = 0;
         }
         else {

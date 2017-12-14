@@ -253,8 +253,10 @@ MonoBehaviour:
   NUM_PLAYERS: 4
   spawner: {fileID: 448275765}
   roomSize: 1.5
+  playersSpawned: 0
   playerTemp: {fileID: 114830343422912422, guid: bc876513014c17c4fba7c6779726f26c,
     type: 2}
+  keyTemp: {fileID: 114259702439883352, guid: dc644b40aea7fc94cb50c79d9c6c6ee2, type: 2}
 --- !u!114 &448275768
 MonoBehaviour:
   m_ObjectHideFlags: 0

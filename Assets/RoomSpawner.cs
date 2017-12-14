@@ -11,8 +11,9 @@ public class RoomSpawner : MonoBehaviour {
     public float roomSize;
     static int roomsSpawned = 0;
     float[,] coordinates;
-    bool playersSpawned = false;
+    public bool playersSpawned = false;
     public Player playerTemp;
+    public Key keyTemp;
 
     // Use this for initialization
     void Start () {
@@ -88,6 +89,10 @@ public class RoomSpawner : MonoBehaviour {
             Player player = Instantiate(playerTemp, boids[i].transform.position, Quaternion.identity);
             player.playerID = i;
             GameController.instance.players.Add(player);
+        }
+
+        for (int i = NUM_PLAYERS; i < NUM_PLAYERS + 4; i++) {
+            Key key = Instantiate(keyTemp, boids[i].transform.position, Quaternion.identity);
         }
     }
 }

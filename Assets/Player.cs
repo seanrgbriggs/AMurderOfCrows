@@ -5,8 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
     public int lightRange = 5;
-    static int movePoints = 150;
+    public int movePoints = 150;
     public int playerID = 0;
+    public int keysCollected = 0;
 
 	// Use this for initialization
 	void Start () {		
@@ -33,14 +34,14 @@ public class Player : MonoBehaviour {
         if (vertical != 0 || horizontal != 0) {
             movePoints--;
         }
+        GetComponent<Rigidbody2D>().velocity = 3 * ((Vector2.up * vertical) + (Vector2.right * horizontal));
+    }
 
-        if (movePoints <= 0) {
-            movePoints = 150;
-            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            GameController.instance.AdvanceTurn();
-        }
-        else {
-            GetComponent<Rigidbody2D>().velocity = 3 * ((Vector2.up * vertical) + (Vector2.right * horizontal));
+    void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.collider.gameObject.tag.Equals("Key")) {
+            Destroy(collision.collider.gameObject);
+            keysCollected++;
+            print("Got Eeeeeeem");
         }
     }
 }
