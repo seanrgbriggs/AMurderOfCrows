@@ -107,4 +107,22 @@ public class RoomSpawner : MonoBehaviour {
         }
         
     }
+
+    void CreateRooms() { 
+        //create 1*1 rooms at each Boid's position
+
+        //expand rooms until they can't expand any more
+        //expand room up if possible
+
+        //expand room down if possible
+
+        //expand room left if possible
+
+        //expand room right if possible
+
+        //rooms are finalized when they can no longer expand
+
+        //if rooms share walls
+        //select a random section of shared wall and place door
+    }
 }
