@@ -11,25 +11,13 @@ public class RoomSpawner : MonoBehaviour {
     public float roomSize;
     static int roomsSpawned = 0;
     float[,] coordinates;
-    bool playersSpawned = false;
+    public bool playersSpawned = false;
     public Player playerTemp;
-    public Sprite[] tileSprites;
-
+    public Key keyTemp;
 
     // Use this for initialization
     void Start () {
         coordinates = new float[NUM_ROOMS, 2];
-
-        Sprite[] shuffledList = new Sprite[tileSprites.Length];
-        for(int i = 0; i < shuffledList.Length; i++)
-        {
-            int randomIndex = Random.Range(0, tileSprites.Length);
-            while (shuffledList[randomIndex] != null)
-                randomIndex = (randomIndex + 1) % tileSprites.Length;
-            shuffledList[randomIndex] = tileSprites[i];
-        }
-        tileSprites = shuffledList;
-
     }
 	
 	// Update is called once per frame
@@ -61,11 +49,6 @@ public class RoomSpawner : MonoBehaviour {
             float down = boids[i].transform.position.y - roomSize / 2;
 
             boids[i].GetComponent<Boid>().shouldMove = false;
-
-            Vector3 pos = boids[i].transform.position;
-            pos.x = Mathf.RoundToInt(pos.x);
-            pos.y = Mathf.RoundToInt(pos.y);
-            boids[i].transform.position = pos;
 
             for (int j = 0; j < NUM_ROOMS; j++) {
                 if(coordinates[j, 0] != 0 && !(left > coordinates[j, 0] + roomSize || 
@@ -106,6 +89,10 @@ public class RoomSpawner : MonoBehaviour {
             Player player = Instantiate(playerTemp, boids[i].transform.position, Quaternion.identity);
             player.playerID = i;
             GameController.instance.players.Add(player);
+        }
+
+        for (int i = NUM_PLAYERS; i < NUM_PLAYERS + 4; i++) {
+            Key key = Instantiate(keyTemp, boids[i].transform.position, Quaternion.identity);
         }
     }
 }
