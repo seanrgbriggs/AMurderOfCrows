@@ -164,7 +164,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -202,6 +202,7 @@ GameObject:
   - component: {fileID: 448275766}
   - component: {fileID: 448275765}
   - component: {fileID: 448275767}
+  - component: {fileID: 448275768}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -222,7 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boidPrefab: {fileID: 114749472850182888, guid: 88404e12de4fd574b8f93111241adb28,
     type: 2}
-  interval: 0.5
+  interval: 0.35
   shouldSpawn: 1
 --- !u!4 &448275766
 Transform:
@@ -248,8 +249,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69ca45f30fa38ba46bef8677b90195cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NUM_ROOMS: 16
+  NUM_PLAYERS: 4
   spawner: {fileID: 448275765}
   roomSize: 1
+  playerTemp: {fileID: 114830343422912422, guid: bc876513014c17c4fba7c6779726f26c,
+    type: 2}
+  tileSprites:
+  - {fileID: 21300000, guid: d5c4154234f06f2488ac1c5fd18e8b38, type: 3}
+  - {fileID: 21300000, guid: ad761b67c5ff16e4e8f974c42afe91f7, type: 3}
+  - {fileID: 21300000, guid: 670c5d0ebd5eb6646b6ed16e6eb577bf, type: 3}
+  - {fileID: 21300000, guid: eb56914fc1992304c883515b32d961d2, type: 3}
+  - {fileID: 21300000, guid: d9491b9c2c42aae4da0cb63e7a1ab4c0, type: 3}
+--- !u!114 &448275768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 448275764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd6046a92295f944971fefb7d1133df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
+  currentPlayerIndex: 0
 --- !u!1 &878820968
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,8 +303,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 114063116535729612, guid: a1b770d81e5d1d34b94553e8e48e9e71,
     type: 2}
-  width: 17
-  height: 9
+  width: 53
+  height: 29
   delta: 1
 --- !u!4 &878820970
 Transform:
@@ -289,7 +313,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 878820968}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8, y: 4, z: 1}
+  m_LocalPosition: {x: -26, y: 14, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

@@ -24,8 +24,17 @@ public class TileManager : MonoBehaviour {
         }
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	
+    public Tile nearestToCoords(int x, int y)
+    {
+        int deltaX = x - Mathf.RoundToInt(transform.position.x);
+        int deltaY = y - Mathf.RoundToInt(transform.position.y);
+        
+        if(deltaX < 0 || deltaX >= width || deltaY < 0 || deltaY >= height)
+        {
+            return null;
+        }
+
+        return tiles[deltaX, deltaY];
+    }
 }

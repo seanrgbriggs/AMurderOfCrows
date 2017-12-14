@@ -74,8 +74,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad2958b27f3de4389e24576984e54f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightX: 9.5
-  topY: 5
+  rightX: 27
+  topY: 13.5
 --- !u!114 &114749472850182888
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -91,9 +91,9 @@ MonoBehaviour:
   sr: {fileID: 212086391700155370}
   rb: {fileID: 50605480967457934}
   spawnNum: 0
-  cohesion: 2
+  cohesion: 1.91
   alignment: 1
-  separation: 2.1
+  separation: 2
   visionRadius: 5
   maxVelocity: 5
   shouldMove: 1
