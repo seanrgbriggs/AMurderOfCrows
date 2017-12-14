@@ -37,6 +37,7 @@ public class RoomSpawner : MonoBehaviour {
 
         if(roomsSpawned >= NUM_ROOMS && !playersSpawned) {
             SpawnPlayers(boids);
+            GameController.instance.AdvanceTurn();
         }
     }
 
@@ -51,10 +52,10 @@ public class RoomSpawner : MonoBehaviour {
             boids[i].GetComponent<Boid>().shouldMove = false;
 
             for (int j = 0; j < NUM_ROOMS; j++) {
-                if(coordinates[j, 0] != 0 && !(left > coordinates[j, 0] + roomSize || 
-                                                  left + roomSize < coordinates[j, 0] ||
-                                                  down > coordinates[j, 1] + roomSize ||
-                                                  down + roomSize < coordinates[j, 1])){
+                if(coordinates[j, 0] != 0 && !(left >= coordinates[j, 0] + roomSize || 
+                                                  left + roomSize <= coordinates[j, 0] ||
+                                                  down >= coordinates[j, 1] + roomSize ||
+                                                  down + roomSize <= coordinates[j, 1])){
                     overlaps = true;
                 }
             }
@@ -77,7 +78,7 @@ public class RoomSpawner : MonoBehaviour {
                 print(roomsSpawned + ", " + boids[i].GetComponent<Boid>().spawnNum);
             }
             else if(boids[i].GetComponent<Boid>().isDone == false){
-                print("ding, " + boids[i].GetComponent<Boid>().spawnNum);
+                //print("ding, " + boids[i].GetComponent<Boid>().spawnNum);
                 //boids[i].GetComponent<Rigidbody2D>().velocity = Vector2.down;
             }
         }

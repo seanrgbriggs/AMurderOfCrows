@@ -27,6 +27,9 @@ public class Player : MonoBehaviour {
         if(GameController.instance.currentPlayerIndex == playerID) {
             AttemptMove(vertical, horizontal);
         }
+        else {
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        }
         
     }
 

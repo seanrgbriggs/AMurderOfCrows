@@ -7,7 +7,7 @@ public class GameController : MonoBehaviour {
     public static GameController instance;
 
     public List<Player> players;
-    public int currentPlayerIndex = 0;
+    public int currentPlayerIndex = -1;
 
     public Player currentPlayer
     {
@@ -47,5 +47,8 @@ public class GameController : MonoBehaviour {
         else {
             currentPlayerIndex++;
         }
+
+        //Camera.main.transform.position = players[currentPlayerIndex].transform.position + new Vector3(0, 0, -10);
+        //Camera.main.orthographicSize = 2.5F;
     }
 }
