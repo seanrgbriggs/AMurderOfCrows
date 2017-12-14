@@ -48,7 +48,7 @@ public class GameController : MonoBehaviour {
             currentPlayerIndex++;
         }
 
-        //Camera.main.transform.position = players[currentPlayerIndex].transform.position + new Vector3(0, 0, -10);
-        //Camera.main.orthographicSize = 2.5F;
+        Camera.main.transform.position = players[currentPlayerIndex].transform.position + new Vector3(0, 0, -10);
+        Camera.main.orthographicSize = 7.5F;
     }
 }

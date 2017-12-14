@@ -52,8 +52,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8e59e0f4e47c3c44a940fddeaa2c046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
   sr: {fileID: 212255042212741848}
+  dirt: {fileID: 21300000, guid: d9491b9c2c42aae4da0cb63e7a1ab4c0, type: 3}
+  grass: {fileID: 21300000, guid: 4f17d9781bd9b304cb84cbe48b203e04, type: 3}
+  cobble: {fileID: 21300000, guid: ad761b67c5ff16e4e8f974c42afe91f7, type: 3}
+  brick: {fileID: 21300000, guid: d5c4154234f06f2488ac1c5fd18e8b38, type: 3}
+  wood: {fileID: 21300000, guid: eb56914fc1992304c883515b32d961d2, type: 3}
+  metal: {fileID: 21300000, guid: 670c5d0ebd5eb6646b6ed16e6eb577bf, type: 3}
+  wall: {fileID: 0}
 --- !u!212 &212255042212741848
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -88,7 +95,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 670c5d0ebd5eb6646b6ed16e6eb577bf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4f17d9781bd9b304cb84cbe48b203e04, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
