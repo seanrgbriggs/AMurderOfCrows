@@ -26,6 +26,7 @@ public class ExitWings : MonoBehaviour {
             if(numKeys == 4)
             {
                 print("win!");
+                allPlayers.FindAll(player => !player.isMurderer).ForEach(player => player.isFree = true);
                 Destroy(gameObject);
             }
         }

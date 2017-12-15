@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,8 +16,11 @@ public class Player : MonoBehaviour {
     public bool isMurderer = false;
     public Tile.TileType standingOn;
     public bool[] hasKey = { false, false, false, false };
+    public bool isFree = false;
+
     [Header("Aesthetics")]
     public Sprite[] sprites;
+    public Sprite freedomSprite;
     public Color color;
     public new Light light;
 
@@ -30,6 +32,15 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (isFree)
+        {
+            GetComponent<SpriteRenderer>().sprite = freedomSprite;
+            GetComponent<Collider2D>().enabled = false;
+            transform.position += Vector3.up * Time.deltaTime;
+            return;
+        }
+
         int vertical = 0;
         int horizontal = 0;
 
@@ -76,7 +87,7 @@ public class Player : MonoBehaviour {
             vertical = 0;
         }
 
-        movePoints -= Math.Abs(vertical) + Math.Abs(horizontal);
+        movePoints -= Mathf.Abs(vertical) + Mathf.Abs(horizontal);
 
         GetComponent<Rigidbody2D>().velocity = 2 * ((Vector2.up * vertical) + (Vector2.right * horizontal));
     }
@@ -88,20 +99,26 @@ public class Player : MonoBehaviour {
             keysCollected++;
             print("Got Eeeeeeem");
         }
+        if (isMurderer){
 
-        if (collision.collider.gameObject.tag.Equals("Player")) {
-            if (isMurderer) {
+            if (collision.collider.gameObject.tag.Equals("Player")) {
                 for(int i = 0; i < 4; i++) {
-                    if(collision.collider.gameObject.GetComponent<Player>().hasKey[i]) {
+                    if(collision.collider.GetComponent<Player>().hasKey[i]) {
                         hasKey[i] = false;
-                        Key key = Instantiate(GameController.instance.keyPrefab, collision.collider.transform.position, Quaternion.identity);
+                        Key key = Instantiate(GameController.instance.keyPrefab, collision.collider.transform.position + (Vector3)Random.insideUnitCircle, Quaternion.identity);
                         key.GetComponent<SpriteRenderer>().sprite = GameController.instance.keySprites[i];
                         key.keyID = i;
                         GameController.instance.keys[i] = key;
                     }
                 }
-                GameController.instance.alive[collision.collider.gameObject.GetComponent<Player>().playerID] = false;
+
+                GameController.instance.alive[collision.collider.GetComponent<Player>().playerID] = false;
                 Destroy(collision.collider.gameObject);
+
+                if(System.Array.FindAll(GameController.instance.alive, living => !living).Length >= GameController.instance.players.Count - 1)
+                {
+                    isFree = true;
+                }
             }
         }
     }
