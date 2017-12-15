@@ -250,6 +250,7 @@ public class RoomSpawner : MonoBehaviour {
                     List<Tile.TileType> types = new List<Tile.TileType>();
                     if(max-- > 0 && CheckPattern(threeByThreeVertical, i, j, out types))
                     {
+                    if (max-- > 0 && CheckPattern(threeByThreeVertical, i, j, out types)) {
                         print(System.String.Concat(types.ToArray()));
                         tiles[i + 1, j + 1].UpdateTile(Tile.TileType.Door);
                         noDoorsBuilt = false;
@@ -260,10 +261,12 @@ public class RoomSpawner : MonoBehaviour {
 
         //Store the original values of all tiles
         tileManager.SetTiles();
+        TileManager.instance.SetTiles();
 
         //Finally, clean up the boids
         foreach(Boid b in FindObjectsOfType<Boid>())
         {
+        foreach (Boid b in FindObjectsOfType<Boid>()) {
             Destroy(b.gameObject);
         }
 
