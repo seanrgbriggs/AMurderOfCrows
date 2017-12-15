@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +40,7 @@ public class GameController : MonoBehaviour {
     void Awake() {
         instance = this;
         keys = new Key[4];
+        DontDestroyOnLoad(this);
     }
 
 	// Use this for initialization
@@ -66,12 +68,13 @@ public class GameController : MonoBehaviour {
                 return;
             }
 
-            if (players[currentPlayerIndex].movePoints <= 0 || Input.GetKeyDown(KeyCode.Space)) {
+            if (players[currentPlayerIndex].movePoints <= 0) {
                 AdvanceTurn();
             }
 
             if (!alive[currentPlayerIndex]) return;
-
+    
+            
             Camera.main.transform.position = players[currentPlayerIndex].transform.position + new Vector3(0, 0, -10);
             Camera.main.orthographicSize = 5;
         }
@@ -88,9 +91,9 @@ public class GameController : MonoBehaviour {
         else {
             currentPlayerIndex++;
         }
-
         if (!alive[currentPlayerIndex]) return;
-
+        SceneManager.LoadScene("Transition", LoadSceneMode.Additive); //Commenting because I'm not a scrublord, Sean "I don't comment my shit like Matt Fortmeyer" briggs
+                                                                      //It calls the transition.
         TileManager.instance.UpdateTiles();
     }
 
