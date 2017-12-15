@@ -61,6 +61,10 @@ public class RoomSpawner : MonoBehaviour {
             Vector3 pos = boids[i].transform.position;
             pos.x = Mathf.RoundToInt(pos.x);
             pos.y = Mathf.RoundToInt(pos.y);
+
+            pos.x = Mathf.Sign(pos.x) * Mathf.Clamp(Mathf.Abs(pos.x), 0, boids[i].GetComponent<LeftRightWrap>().rightX - 1);
+            pos.y = Mathf.Sign(pos.y) * Mathf.Clamp(Mathf.Abs(pos.y), 0, boids[i].GetComponent<LeftRightWrap>().topY - 1);
+
             boids[i].transform.position = pos;
 
 
@@ -122,7 +126,6 @@ public class RoomSpawner : MonoBehaviour {
         GameController.instance.players[rand].isMurderer = true;
     }
 
-
     public class Room
     {
         public Tile.TileType type;
@@ -162,6 +165,7 @@ public class RoomSpawner : MonoBehaviour {
             Tile t = tileManager.nearestToCoords(x, y);
             if (t == null) {
                 rooms.RemoveAt(rooms.Count - 1);
+                Destroy(b.gameObject);
             }
             else {
                 t.UpdateTile(tileType);
@@ -221,6 +225,12 @@ public class RoomSpawner : MonoBehaviour {
             }
             spawnDoors();
             RemoveExtraDoors();
+
+            //Finally, clean up the boids
+            foreach (Boid b in FindObjectsOfType<Boid>())
+            {
+                Destroy(b.gameObject);
+            }
         }
     }
 
@@ -231,42 +241,35 @@ public class RoomSpawner : MonoBehaviour {
             { TilePatternTemplate.Any, TilePatternTemplate.Floor, TilePatternTemplate.Any}
             };
 
-        //Add Doors to the rooms, where there are two tiles on opposite sides of a 1x3 wall.
-        bool noDoorsBuilt = true;
-        Tile[,] tiles = TileManager.instance.tiles;
-        int max = 1000;
-        do {
-            noDoorsBuilt = true;
-            for (int i = 1; i < TileManager.instance.width - 1; i++) {
-                for (int j = 0; j < TileManager.instance.height - 3; j++) {
-                    //if(tiles[i,j].type != Tile.TileType.Wall
-                    //    && tiles[i, j+2].type != Tile.TileType.Wall
-                    //    && tiles[i, j+1].type == Tile.TileType.Wall
-                    //    && tiles[i-1, j+1].type == Tile.TileType.Wall
-                    //    && tiles[i+1,j+1].type == Tile.TileType.Wall)
-                    //{
-                    //    tiles[i, j + 1].UpdateTile(Tile.TileType.Door);
-                    //    noDoorsBuilt = false;
-                    //}
+        TilePatternTemplate[,] threeByThreeHorizontal = new TilePatternTemplate[3, 3] {
+            { TilePatternTemplate.Any, TilePatternTemplate.Wall, TilePatternTemplate.Any },
+            { TilePatternTemplate.Floor, TilePatternTemplate.Wall, TilePatternTemplate.Floor},
+            { TilePatternTemplate.Any, TilePatternTemplate.Wall, TilePatternTemplate.Any}
+            };
 
-                    List<Tile.TileType> types = new List<Tile.TileType>();
-                    if(max-- > 0 && CheckPattern(threeByThreeVertical, i, j, out types))
-                    {
-                        tiles[i + 1, j + 1].UpdateTile(Tile.TileType.Door);
-                        noDoorsBuilt = false;
-                    }
+        //Add Doors to the rooms, where there are two tiles on opposite sides of a 1x3 wall.
+        Tile[,] tiles = TileManager.instance.tiles;
+        for (int i = 1; i < TileManager.instance.width - 1; i++)
+        {
+            for (int j = 0; j < TileManager.instance.height - 3; j++)
+            {
+                if (CheckPattern(threeByThreeVertical, i, j) && CheckPattern(threeByThreeHorizontal, i, j))
+                {
+                    tiles[i + 1, j + 1].UpdateTile(Tile.TileType.Door);
                 }
             }
-        } while (!noDoorsBuilt && max-- > 0);
+        }
 
         //Store the original values of all tiles
         TileManager.instance.SetTiles();
 
-        //Finally, clean up the boids
-        foreach (Boid b in FindObjectsOfType<Boid>()) {
-            Destroy(b.gameObject);
-        }
 
+    }
+
+    private bool CheckPattern(TilePatternTemplate[,] pattern, int x, int y)
+    {
+        List<Tile.TileType> dataDump;
+        return CheckPattern(pattern, x, y, out dataDump);
     }
 
     private bool CheckPattern(TilePatternTemplate[,] pattern, int x, int y, out List<Tile.TileType> types) {
@@ -322,9 +325,7 @@ public class RoomSpawner : MonoBehaviour {
             for (int i = 0; i < TileManager.instance.width; i++) {
                 for (int j = 0; j < TileManager.instance.height - 5; j++) {
 
-                    List<Tile.TileType> types = new List<Tile.TileType>();
-                    if (max-- > 0 && CheckDoorPattern(verticalFive, i, j, out types)) {
-                        print(System.String.Concat(types.ToArray()));
+                    if (max-- > 0 && CheckDoorPattern(verticalFive, i, j)) {
                         tiles[i, j].UpdateTile(Tile.TileType.Wall);
                         noDoorsBuilt = false;
                     }
@@ -342,7 +343,13 @@ public class RoomSpawner : MonoBehaviour {
 
     }
 
-    private bool CheckDoorPattern(TilePatternTemplate[] pattern, int x, int y, out List<Tile.TileType> types) {
+    private bool CheckDoorPattern(TilePatternTemplate[] pattern, int x, int y)
+    {
+        List<Tile.TileType> dataDump;
+        return CheckDoorPatternDB(pattern, x, y, out dataDump);
+    }
+
+    private bool CheckDoorPatternDB(TilePatternTemplate[] pattern, int x, int y, out List<Tile.TileType> types) {
         types = new List<Tile.TileType>();
         TileManager tileManager = TileManager.instance;
         for (int i = 0; i < pattern.GetLength(0); i++) {

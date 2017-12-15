@@ -72,7 +72,7 @@ public class GameController : MonoBehaviour {
                 return;
             }
 
-            if (currentPlayer.movePoints <= 0) {
+            if (currentPlayer.movePoints <= 0 && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Joystick1Button9))) {
                 AdvanceTurn();
             }
 

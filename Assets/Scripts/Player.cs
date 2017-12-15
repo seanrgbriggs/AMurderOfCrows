@@ -93,35 +93,39 @@ public class Player : MonoBehaviour {
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
-
-        if (isMurderer){
-
-            if (collision.collider.gameObject.tag.Equals("Player")) {
-                for(int i = 0; i < 4; i++) {
-                    if(collision.collider.GetComponent<Player>().hasKey[i]) {
-                        hasKey[i] = false;
-                        Key key = Instantiate(GameController.instance.keyPrefab, collision.collider.transform.position + (Vector3)Random.insideUnitCircle, Quaternion.identity);
-                        key.GetComponent<SpriteRenderer>().sprite = GameController.instance.keySprites[i];
-                        key.keyID = i;
-                        GameController.instance.keys[i] = key;
-                    }
-                }
-
-                GameController.instance.alive[collision.collider.GetComponent<Player>().playerID] = false;
-                Destroy(collision.collider.gameObject);
-
-                if(System.Array.FindAll(GameController.instance.alive, living => !living).Length >= GameController.instance.players.Count - 1)
+        
+        if (isMurderer && collision.collider.gameObject.tag.Equals("Player"))
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (collision.collider.GetComponent<Player>().hasKey[i])
                 {
-                    isFree = true;
+                    hasKey[i] = false;
+                    Key key = Instantiate(GameController.instance.keyPrefab, collision.collider.transform.position + (Vector3)Random.insideUnitCircle, Quaternion.identity);
+                    key.GetComponent<SpriteRenderer>().sprite = GameController.instance.keySprites[i];
+                    key.keyID = i;
+                    GameController.instance.keys[i] = key;
                 }
             }
-        }
-        else if (collision.collider.gameObject.tag.Equals("Key"))
-        {
-            hasKey[collision.collider.GetComponent<Key>().keyID] = true;
+
+            GameController.instance.alive[collision.collider.GetComponent<Player>().playerID] = false;
             Destroy(collision.collider.gameObject);
+
+            if (System.Array.FindAll(GameController.instance.alive, living => !living).Length >= GameController.instance.players.Count - 1)
+            {
+                isFree = true;
+            }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (!isMurderer && collider.gameObject.tag.Equals("Key"))
+        {
+            hasKey[collider.GetComponent<Key>().keyID] = true;
+            Destroy(collider.gameObject);
             keysCollected++;
-            print("Got Eeeeeeem");
+            //print("Got Eeeeeeem");
         }
     }
 

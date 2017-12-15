@@ -331,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69ca45f30fa38ba46bef8677b90195cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToKillBoids: 3.84
+  timeToKillBoids: 15
   NUM_ROOMS: 24
   NUM_PLAYERS: 4
   spawner: {fileID: 448275765}
@@ -604,7 +604,7 @@ Light:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1731348794}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
