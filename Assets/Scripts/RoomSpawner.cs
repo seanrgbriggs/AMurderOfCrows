@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class RoomSpawner : MonoBehaviour {
 
-
+    private enum TilePatternTemplate
+    {
+        Any, Floor, Wall
+    }
 
     static float elapsed = 0;
     public float timeToKillBoids = 15f;
@@ -26,15 +29,15 @@ public class RoomSpawner : MonoBehaviour {
 	void Update () {
         elapsed += Time.deltaTime;
 
-        GameObject[] boids = GameObject.FindGameObjectsWithTag("Boid");
-        System.Array.Sort(boids, (x, y) => x.GetComponent<Boid>().spawnNum.CompareTo(y.GetComponent<Boid>().spawnNum));
+        Boid[] boids = FindObjectsOfType<Boid>();
+        System.Array.Sort(boids, (x, y) => x.spawnNum.CompareTo(y.spawnNum));
 
         if (boids.Length >= NUM_ROOMS) {
             spawner.shouldSpawn = false;
         }
 
         if (elapsed >= timeToKillBoids && roomsSpawned < NUM_ROOMS) {
-            SpawnRooms(boids);
+            AlignBoidsToGrid(boids);
             CreateRooms();
         }
 
@@ -45,15 +48,15 @@ public class RoomSpawner : MonoBehaviour {
     }
 
     //IDEA: Have the boid keep moving if it would overlap with other rooms.  
-    void SpawnRooms(GameObject[] boids) {
+    void AlignBoidsToGrid(Boid[] boids) {
         for (int i = 0; i < NUM_ROOMS; i++) {
             bool overlaps = false;
 
             float left = boids[i].transform.position.x - roomSize / 2;
             float down = boids[i].transform.position.y - roomSize / 2;
 
-            boids[i].GetComponent<Boid>().shouldMove = false;
-            boids[i].GetComponent<SpriteRenderer>().enabled = false;
+            boids[i].shouldMove = false;
+            boids[i].spriteRenderer.enabled = false;
 
             Vector3 pos = boids[i].transform.position;
             pos.x = Mathf.RoundToInt(pos.x);
@@ -70,8 +73,8 @@ public class RoomSpawner : MonoBehaviour {
                 }
             }
             if (!overlaps) {
-                boids[i].GetComponent<Boid>().isDone = true;
-                boids[i].GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                boids[i].isDone = true;
+                boids[i].rb.velocity = Vector2.zero;
 
                 coordinates[i, 0] = left;
                 coordinates[i, 1] = down;
@@ -87,18 +90,21 @@ public class RoomSpawner : MonoBehaviour {
                 roomsSpawned++;
                 //print(roomsSpawned + ", " + boids[i].GetComponent<Boid>().spawnNum);
             }
-            else if(boids[i].GetComponent<Boid>().isDone == false){
+            else if(boids[i].isDone == false){
                 //print("ding, " + boids[i].GetComponent<Boid>().spawnNum);
                 //boids[i].GetComponent<Rigidbody2D>().velocity = Vector2.down;
             }
         }
     }
 
-    void SpawnPlayers(GameObject[] boids) {
+    void SpawnPlayers(Boid[] boids) {
         playersSpawned = true;
+
+        Color[] playerColors = new Color[] { Color.red, Color.blue, Color.green, Color.magenta };
         for (int i = 0; i < NUM_PLAYERS; i++) {
             Player player = Instantiate(playerTemp, boids[i].transform.position, Quaternion.identity);
             player.playerID = i;
+            player.color = playerColors[i];
             GameController.instance.players.Add(player);
         }
 
@@ -140,6 +146,8 @@ public class RoomSpawner : MonoBehaviour {
         TileManager tileManager = FindObjectOfType<TileManager>();
         GameController gc = GameController.instance;
 
+
+        //Construct the list of room points.
         List<Room> rooms = new List<Room>();
         foreach (Boid b in FindObjectsOfType<Boid>()) {
             int x = Mathf.RoundToInt(b.transform.position.x);
@@ -156,6 +164,8 @@ public class RoomSpawner : MonoBehaviour {
                 t.UpdateTile(tileType);
             }
         }
+
+        //Build all rooms in the list
         while (roomsSpawned < NUM_ROOMS) {
             for (int i = 0; i < rooms.Count; i++) {
                 List<Tile> nextExpansion = new List<Tile>();
@@ -166,23 +176,7 @@ public class RoomSpawner : MonoBehaviour {
                     continue;
                 }
 
-                /*
-                for (int x = -2; x <= 2; x++) {
-                    for (int y = -2; y <= 2; y++) {
-                        Tile nextTile = tileManager.nearestToCoords(curRoom.x + x, curRoom.y + y);
-                        if (nextTile != null && (nextTile.type == Tile.TileType.Grass || nextTile.type == Tile.TileType.Wall)) {
-                            nextTile.UpdateTile(curRoom.type);
-                        }
-                    }
-                }
-                for (int x = -3; x <= 3; x ++) {
-                    for (int y = -3; y <= 3; y ++) {
-                        Tile nextTile = tileManager.nearestToCoords(curRoom.x + x, curRoom.y + y);
-                        if (nextTile != null && nextTile.type == Tile.TileType.Grass) {
-                            nextTile.UpdateTile(Tile.TileType.Wall);
-                        }
-                    }
-                }*/
+
                 nextExpansion.Clear();
                 for (int x = -curRoom.size; x <= curRoom.size; x++) {
                     for (int y = -curRoom.size; y <= curRoom.size; y++) {
@@ -204,13 +198,14 @@ public class RoomSpawner : MonoBehaviour {
                 }
 
                 if (!curRoom.canExpand) {
-                    int rand = Mathf.RoundToInt(Random.Range(0, nextExpansion.Count));
                     for (int m = 0; m < nextExpansion.Count; m++) {
                         if (nextExpansion[m].type == Tile.TileType.Grass) {
                             nextExpansion[m].UpdateTile(Tile.TileType.Wall);
                         }
                     }
-                    nextExpansion[rand].UpdateTile(Tile.TileType.Door);
+
+                    //int rand = Mathf.RoundToInt(Random.Range(0, nextExpansion.Count));
+                    //nextExpansion[rand].UpdateTile(Tile.TileType.Door);
                     roomsSpawned++;
                     continue;
                 }
@@ -221,56 +216,96 @@ public class RoomSpawner : MonoBehaviour {
                     }
                 }
             }
-            /*
-                for each boid
-                    create room at boid location
 
-                roomsCanExpand = true
-                while(roomsCanExpand)
-                    roomsCanExpand = false
-                    for each room
-                        if(canRoomExpandLeft)
-                            roomsCanExpand = true;
-                            ExpandRoomLeft
-                        if(canRoomExpandRight)
-                            roomsCanExpand = true;
-                            ExpandRoomRight
-                        if(canRoomExpandUp)
-                            roomsCanExpand = true;
-                            ExpandRoomUp
-                        if(canRoomExpandDown)
-                            roomsCanExpand = true;
-                            ExpandRoomDown
-
-
-
-             */
         }
+
+        TilePatternTemplate[,] threeByThreeVertical = new TilePatternTemplate[3, 3] {
+            { TilePatternTemplate.Any, TilePatternTemplate.Floor, TilePatternTemplate.Any },
+            { TilePatternTemplate.Wall, TilePatternTemplate.Wall, TilePatternTemplate.Wall },
+            { TilePatternTemplate.Any, TilePatternTemplate.Floor, TilePatternTemplate.Any}
+            };
+        
+        //Add Doors to the rooms, where there are two tiles on opposite sides of a 1x3 wall.
+        bool noDoorsBuilt = true;
+        Tile[,] tiles = tileManager.tiles;
+        int max = 1000;
+        do
+        {
+            noDoorsBuilt = true;
+            for(int i = 1; i< tileManager.width - 1; i++)
+            {
+                for(int j= 0; j< tileManager.height - 3; j++)
+                {
+                    //if(tiles[i,j].type != Tile.TileType.Wall
+                    //    && tiles[i, j+2].type != Tile.TileType.Wall
+                    //    && tiles[i, j+1].type == Tile.TileType.Wall
+                    //    && tiles[i-1, j+1].type == Tile.TileType.Wall
+                    //    && tiles[i+1,j+1].type == Tile.TileType.Wall)
+                    //{
+                    //    tiles[i, j + 1].UpdateTile(Tile.TileType.Door);
+                    //    noDoorsBuilt = false;
+                    //}
+                    List<Tile.TileType> types = new List<Tile.TileType>();
+                    if(max-- > 0 && CheckPattern(threeByThreeVertical, i, j, out types))
+                    {
+                        print(System.String.Concat(types.ToArray()));
+                        tiles[i + 1, j + 1].UpdateTile(Tile.TileType.Door);
+                        noDoorsBuilt = false;
+                    }
+                }
+            }
+        } while (!noDoorsBuilt && max-- > 0);
+
+        //Store the original values of all tiles
         tileManager.SetTiles();
+
+        //Finally, clean up the boids
+        foreach(Boid b in FindObjectsOfType<Boid>())
+        {
+            Destroy(b.gameObject);
+        }
+
     }
-
-    bool canRoomExpandLeft(Room room) {
-        /*
-            int x = room.leftEdge - 1;
-            int y = room.topEdge;
-
-            while(y <= room.bottomEdge)
-                if(world(x, y).isNotEmpty)
+ 
+    private bool CheckPattern(TilePatternTemplate[,] pattern, int x, int y, out List<Tile.TileType> types)
+    {
+        types = new List<Tile.TileType>();
+        TileManager tileManager = TileManager.instance;
+        for(int i = 0; i < pattern.GetLength(0); i++)
+        {
+            for(int j = 0; j < pattern.GetLength(1); j++)
+            {
+                if(i + x >= tileManager.tiles.GetLength(0) || j + y >= tileManager.tiles.GetLength(1))
+                {
                     return false;
-         */
+                }
+
+                Tile curTile = tileManager.nearestToCoords(i + x, j + y);
+                if(curTile == null)
+                {
+                    return false;
+                }
+
+                types.Add(curTile.type);
+
+                switch (pattern[i, j])
+                {
+
+                    case TilePatternTemplate.Any:
+                        continue;
+                    case TilePatternTemplate.Floor:
+                        if (curTile.type == Tile.TileType.Wall || curTile.type == Tile.TileType.Door)
+                            return false;
+                        break;
+                    case TilePatternTemplate.Wall:
+                        if (curTile.type != Tile.TileType.Wall)
+                            return false;
+                        break;
+                }
+            }
+        }
 
         return true;
     }
 
-    void expandRoomLeft(Room room) {
-        /*
-            int x = room.leftEdge - 1;
-            int y = room.topEdge;
-
-            while(y <= room.bottomEdge)
-                world(x, y) = room
-
-            room.leftEdge += 1;
-         */
-    }
 }

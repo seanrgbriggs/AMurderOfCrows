@@ -31,19 +31,20 @@ public class BoidSpawner : MonoBehaviour {
             switch (boid.flockID)
             {
                 case Boid.BoidType.Black:
-                    boid.sr.color = Color.black;
+                    boid.spriteRenderer.color = Color.black;
+                    boid.light.color = Color.Lerp(Color.black, Color.magenta, 0.3f);
                     break;
                 case Boid.BoidType.Red:
-                    boid.sr.color = Color.red;
+                    boid.spriteRenderer.color = boid.light.color = Color.red;
                     break;
                 case Boid.BoidType.Blue:
-                    boid.sr.color = Color.blue;
+                    boid.spriteRenderer.color = boid.light.color = Color.blue;
                     break;
                 case Boid.BoidType.Green:
-                    boid.sr.color = Color.green;
+                    boid.spriteRenderer.color = boid.light.color = Color.green;
                     break;
                 case Boid.BoidType.White:
-                    boid.sr.color = Color.white;
+                    boid.spriteRenderer.color = boid.light.color = Color.white;
                     break;
             }
 

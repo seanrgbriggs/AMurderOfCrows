@@ -68,22 +68,24 @@ public class GameController : MonoBehaviour {
                 return;
             }
 
-            if (players[currentPlayerIndex].movePoints <= 0) {
+            if (currentPlayer.movePoints <= 0) {
                 AdvanceTurn();
             }
 
             if (!alive[currentPlayerIndex]) return;
     
             
-            Camera.main.transform.position = players[currentPlayerIndex].transform.position + new Vector3(0, 0, -10);
+            Camera.main.transform.position = currentPlayer.transform.position + new Vector3(0, 0, -10);
             Camera.main.orthographicSize = 5;
         }
 	}
 
 
     public void AdvanceTurn() {
-        players[currentPlayerIndex].movePoints = 150;
-        players[currentPlayerIndex].GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        currentPlayer.movePoints = currentPlayer.maxMovePoints;
+
+        currentPlayer.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        currentPlayer.light.enabled = false;
 
         if (currentPlayerIndex == players.Count - 1) {
             currentPlayerIndex = 0;
@@ -91,9 +93,13 @@ public class GameController : MonoBehaviour {
         else {
             currentPlayerIndex++;
         }
+
         if (!alive[currentPlayerIndex]) return;
+
+        currentPlayer.light.enabled = true;
         SceneManager.LoadScene("Transition", LoadSceneMode.Additive); //Commenting because I'm not a scrublord, Sean "I don't comment my shit like Matt Fortmeyer" briggs
                                                                       //It calls the transition.
+                                                                      //You can't say you're commenting and then follow up with a four-word comment, nerd
         TileManager.instance.UpdateTiles();
     }
 

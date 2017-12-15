@@ -8,6 +8,7 @@ public class TileManager : MonoBehaviour {
     public int width = 17;
     public int height = 9;
     public float delta = 1;
+    public bool shouldHideExternalTiles = true;
 
     [HideInInspector]
     public Tile[,] tiles;
@@ -36,16 +37,27 @@ public class TileManager : MonoBehaviour {
 	public void UpdateTiles() {
         ResetTiles();
 
-        Player player = GameController.instance.currentPlayer;
-        int x = Mathf.RoundToInt(player.transform.position.x);
-        int y = Mathf.RoundToInt(player.transform.position.y);
+        if (shouldHideExternalTiles)
+        {
+            HideExternalTiles();
+        }
+
+    }
+
+    private void HideExternalTiles()
+    {
+        Transform player = GameController.instance.currentPlayer.transform;
+        int x = Mathf.RoundToInt(player.position.x);
+        int y = Mathf.RoundToInt(player.position.y);
 
         Tile.TileType playerType = nearestToCoords(x, y).type;
-
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
                 Tile.TileType type = tiles[i, j].type;
-                if (type != playerType && type != Tile.TileType.Wall && type != Tile.TileType.Door) {
+                if (type != playerType && type != Tile.TileType.Wall && type != Tile.TileType.Door)
+                {
                     tiles[i, j].UpdateTile(Tile.TileType.Blank);
                 }
             }

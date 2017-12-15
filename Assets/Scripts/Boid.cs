@@ -11,7 +11,8 @@ public class Boid : MonoBehaviour {
     }
 
     public BoidType flockID;
-    public SpriteRenderer sr;
+    public SpriteRenderer spriteRenderer;
+    public new Light light;
     public Rigidbody2D rb;
     public int spawnNum;
 
@@ -21,6 +22,8 @@ public class Boid : MonoBehaviour {
     public float separation;
     public float visionRadius;
     public float maxVelocity;
+
+    [Header("Room Creation States")]
     public bool shouldMove = true;
     public bool isDone = false;
 
@@ -41,7 +44,7 @@ public class Boid : MonoBehaviour {
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
 
             transform.rotation = Quaternion.FromToRotation(Vector2.up + Vector2.left, rb.velocity);
-        }
+        } 
     }
 
     //The force vector which makes boids of a feather flock together 

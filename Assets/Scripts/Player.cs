@@ -5,17 +5,26 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+    [Header("Player Base Values")]
     public int lightRange = 5;
+    [HideInInspector]
     public int movePoints = 225;
+    public int maxMovePoints = 225;
+
+    [Header("Player Game Stats")]
     public int playerID = 0;
     public int keysCollected = 0;
-    public Sprite[] sprites;
     public bool isMurderer = false;
     public Tile.TileType standingOn;
     public bool[] hasKey = { false, false, false, false };
+    [Header("Aesthetics")]
+    public Sprite[] sprites;
+    public Color color;
+    public Light light;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         standingOn = TileManager.instance.nearestToCoords(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y)).type;
     }
 	

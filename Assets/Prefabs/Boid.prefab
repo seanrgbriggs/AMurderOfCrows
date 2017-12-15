@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 50605480967457934}
   - component: {fileID: 114749472850182888}
   - component: {fileID: 114145580062700602}
+  - component: {fileID: 108846835655418160}
   m_Layer: 0
   m_Name: Boid
   m_TagString: Boid
@@ -63,6 +64,42 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!108 &108846835655418160
+Light:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1486092011621170}
+  m_Enabled: 1
+  serializedVersion: 8
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 1
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 0
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!114 &114145580062700602
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -88,12 +125,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flockID: 0
-  sr: {fileID: 212086391700155370}
+  spriteRenderer: {fileID: 212086391700155370}
+  light: {fileID: 108846835655418160}
   rb: {fileID: 50605480967457934}
   spawnNum: 0
-  cohesion: 3.4
-  alignment: 1
-  separation: 3.68
+  cohesion: 3
+  alignment: 10
+  separation: 191.75
   visionRadius: 10
   maxVelocity: 5
   shouldMove: 1
