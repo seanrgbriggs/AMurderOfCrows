@@ -109,7 +109,7 @@ public class RoomSpawner : MonoBehaviour {
         }
 
         for(int i = 0; i < 4; i++) {
-            Key key = Instantiate(GameController.instance.keyTemp, boids[NUM_PLAYERS + i].transform.position, Quaternion.identity);
+            Key key = Instantiate(GameController.instance.keyPrefab, boids[NUM_PLAYERS + i].transform.position, Quaternion.identity);
             key.GetComponent<SpriteRenderer>().sprite = GameController.instance.keySprites[i];
             key.keyID = i;
             GameController.instance.keys[i] = key;
@@ -248,7 +248,6 @@ public class RoomSpawner : MonoBehaviour {
                     List<Tile.TileType> types = new List<Tile.TileType>();
                     if(max-- > 0 && CheckPattern(threeByThreeVertical, i, j, out types))
                     {
-                        print(System.String.Concat(types.ToArray()));
                         tiles[i + 1, j + 1].UpdateTile(Tile.TileType.Door);
                         noDoorsBuilt = false;
                     }

@@ -20,7 +20,7 @@ public class Player : MonoBehaviour {
     [Header("Aesthetics")]
     public Sprite[] sprites;
     public Color color;
-    public Light light;
+    public new Light light;
 
     // Use this for initialization
     void Start()
@@ -94,7 +94,7 @@ public class Player : MonoBehaviour {
                 for(int i = 0; i < 4; i++) {
                     if(collision.collider.gameObject.GetComponent<Player>().hasKey[i]) {
                         hasKey[i] = false;
-                        Key key = Instantiate(GameController.instance.keyTemp, collision.collider.transform.position, Quaternion.identity);
+                        Key key = Instantiate(GameController.instance.keyPrefab, collision.collider.transform.position, Quaternion.identity);
                         key.GetComponent<SpriteRenderer>().sprite = GameController.instance.keySprites[i];
                         key.keyID = i;
                         GameController.instance.keys[i] = key;

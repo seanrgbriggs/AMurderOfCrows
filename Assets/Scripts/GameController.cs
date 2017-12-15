@@ -13,13 +13,17 @@ public class GameController : MonoBehaviour {
     }
 
     public static GameController instance;
+    public List<BoidColorTileMatch> colorTileDictionary;
 
+    [Header("Player Information")]
     public List<Player> players;
     public int currentPlayerIndex = -1;
-    public List<BoidColorTileMatch> colorTileDictionary;
-    public Key keyTemp;
     public bool[] alive = { true, true, true, true };
-    //Sprites
+
+    [Header("Prefabs")]
+    public Key keyPrefab;
+    public ExitWings wingsPrefab;
+
     public Sprite[] keySprites;
 
     [HideInInspector]
