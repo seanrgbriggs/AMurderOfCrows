@@ -6,19 +6,18 @@ using UnityEngine.UI;
 
 
 public class Transition : MonoBehaviour {
+    
+    public Text txt;
 
-    [SerializeField]
-    private Text txt = null;
-
-    public string player;
+    //public string player;
 
 	// Use this for initialization
 	void Start () {
-        player = GameController.instance.currentPlayerIndex.ToString();
-        if(player == "0")
-        {
-            player = "4"; 
-        }
+        string player;
+        int playerNum = GameController.instance.currentPlayerIndex;
+
+        player = (playerNum == 0) ? "4" : playerNum.ToString();
+        
         if (txt != null)
         {
             txt.text = player;
@@ -28,7 +27,7 @@ public class Transition : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown("space"))
+        if (Input.anyKeyDown)
         {
             SceneManager.UnloadScene("Transition");
         }

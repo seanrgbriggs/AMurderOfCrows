@@ -33,9 +33,9 @@ public class Boid : MonoBehaviour {
             siftForFlock(neighbors, out flockNeighbors, out nonFlockNeighbors);
 
             Vector2 flockVelocity = Vector2.zero;
-            flockVelocity += cohesion * cohesionVector(flockNeighbors).normalized;
-            flockVelocity += alignment * alignmentVector(flockNeighbors).normalized;
-            flockVelocity += separation * separationVector(neighbors).normalized;
+            flockVelocity += cohesion * cohesionVector(flockNeighbors);
+            flockVelocity += alignment * alignmentVector(flockNeighbors);
+            flockVelocity += separation * separationVector(neighbors);
 
             rb.velocity += flockVelocity;
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
