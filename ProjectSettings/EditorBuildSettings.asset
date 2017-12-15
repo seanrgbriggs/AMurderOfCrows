@@ -4,4 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/ScenicViewBriggs.unity
+    guid: 151ca1fa97f003445a087643464081f0
+  - enabled: 1
+    path: Assets/Transition.unity
+    guid: b2cd88695455ccc49a7fc777a3c44eb8

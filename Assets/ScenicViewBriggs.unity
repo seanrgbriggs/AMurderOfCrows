@@ -287,6 +287,7 @@ MonoBehaviour:
     tileType: 5
     tileSprite: {fileID: 21300000, guid: 670c5d0ebd5eb6646b6ed16e6eb577bf, type: 3}
   keyTemp: {fileID: 114259702439883352, guid: dc644b40aea7fc94cb50c79d9c6c6ee2, type: 2}
+  alive: 01010101
   keySprites:
   - {fileID: 21300000, guid: 070eea782ef0b2d45ad0ecf7d6cbb80f, type: 3}
   - {fileID: 21300000, guid: 28e701799812b854ab8c3d92e099a3f3, type: 3}
