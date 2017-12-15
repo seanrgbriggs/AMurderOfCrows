@@ -93,12 +93,7 @@ public class Player : MonoBehaviour {
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.collider.gameObject.tag.Equals("Key")) {
-            hasKey[collision.collider.GetComponent<Key>().keyID] = true;
-            Destroy(collision.collider.gameObject);
-            keysCollected++;
-            print("Got Eeeeeeem");
-        }
+
         if (isMurderer){
 
             if (collision.collider.gameObject.tag.Equals("Player")) {
@@ -120,6 +115,13 @@ public class Player : MonoBehaviour {
                     isFree = true;
                 }
             }
+        }
+        else if (collision.collider.gameObject.tag.Equals("Key"))
+        {
+            hasKey[collision.collider.GetComponent<Key>().keyID] = true;
+            Destroy(collision.collider.gameObject);
+            keysCollected++;
+            print("Got Eeeeeeem");
         }
     }
 

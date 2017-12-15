@@ -105,6 +105,7 @@ public class RoomSpawner : MonoBehaviour {
             Player player = Instantiate(playerTemp, boids[i].transform.position, Quaternion.identity);
             player.playerID = i;
             player.color = playerColors[i];
+            player.GetComponent<SpriteRenderer>().color = player.color;
             GameController.instance.players.Add(player);
         }
 
