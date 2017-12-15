@@ -245,6 +245,7 @@ public class RoomSpawner : MonoBehaviour {
                     //    tiles[i, j + 1].UpdateTile(Tile.TileType.Door);
                     //    noDoorsBuilt = false;
                     //}
+
                     List<Tile.TileType> types = new List<Tile.TileType>();
                     if(max-- > 0 && CheckPattern(threeByThreeVertical, i, j, out types))
                     {
@@ -266,30 +267,25 @@ public class RoomSpawner : MonoBehaviour {
         }
 
     }
- 
-    private bool CheckPattern(TilePatternTemplate[,] pattern, int x, int y, out List<Tile.TileType> types)
-    {
+
+    private bool CheckPattern(TilePatternTemplate[,] pattern, int x, int y, out List<Tile.TileType> types) {
         types = new List<Tile.TileType>();
         TileManager tileManager = TileManager.instance;
-        for(int i = 0; i < pattern.GetLength(0); i++)
-        {
-            for(int j = 0; j < pattern.GetLength(1); j++)
-            {
-                if(i + x >= tileManager.tiles.GetLength(0) || j + y >= tileManager.tiles.GetLength(1))
-                {
+        for (int i = 0; i < pattern.GetLength(0); i++) {
+            for (int j = 0; j < pattern.GetLength(1); j++) {
+                if (i + x >= tileManager.tiles.GetLength(0) || j + y >= tileManager.tiles.GetLength(1)) {
                     return false;
                 }
 
-                Tile curTile = tileManager.nearestToCoords(i + x, j + y);
-                if(curTile == null)
-                {
+                Tile curTile = TileManager.instance.tiles[i + x, j + y];
+
+                if (curTile == null) {
                     return false;
                 }
 
                 types.Add(curTile.type);
 
-                switch (pattern[i, j])
-                {
+                switch (pattern[i, j]) {
 
                     case TilePatternTemplate.Any:
                         continue;
@@ -304,7 +300,6 @@ public class RoomSpawner : MonoBehaviour {
                 }
             }
         }
-
         return true;
     }
 

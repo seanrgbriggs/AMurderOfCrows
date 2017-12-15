@@ -5,8 +5,8 @@ using UnityEngine;
 public class TileManager : MonoBehaviour {
 
     public Tile tilePrefab;
-    public int width = 17;
-    public int height = 9;
+    public int width = 53;
+    public int height = 29;
     public float delta = 1;
     public bool shouldHideExternalTiles = true;
 
@@ -90,7 +90,6 @@ public class TileManager : MonoBehaviour {
         {
             return null;
         }
-
         return tiles[deltaX, deltaY];
     }
 }
