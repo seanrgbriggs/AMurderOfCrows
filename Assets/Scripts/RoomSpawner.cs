@@ -115,6 +115,8 @@ public class RoomSpawner : MonoBehaviour {
             GameController.instance.keys[i] = key;
         }
 
+        Instantiate(GameController.instance.wingsPrefab, boids[NUM_PLAYERS + 4].transform.position, Quaternion.identity);
+
         int rand = Random.Range(0, 4);
         GameController.instance.players[rand].isMurderer = true;
     }

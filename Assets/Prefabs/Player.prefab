@@ -173,11 +173,13 @@ MonoBehaviour:
   isMurderer: 0
   standingOn: 0
   hasKey: 00000000
+  isFree: 0
   sprites:
   - {fileID: 21300000, guid: 860961a974209be4395962b07c00208f, type: 3}
   - {fileID: 21300000, guid: 2bf855eab45e37d47be1620c665a695a, type: 3}
   - {fileID: 21300000, guid: fe53f69781b2c4e478f8636fde805b42, type: 3}
   - {fileID: 21300000, guid: aa6cdc5b3fa29f745bcc33698908078b, type: 3}
+  freedomSprite: {fileID: 21300000, guid: 6ace068748ca0714784e050d0b7e74a4, type: 3}
   color: {r: 1, g: 1, b: 1, a: 1}
   light: {fileID: 108747025080344284}
 --- !u!212 &212937004662747996

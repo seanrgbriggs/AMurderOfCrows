@@ -5,11 +5,11 @@ using UnityEngine;
 public class ExitWings : MonoBehaviour {
 
     public int radius;
-    List<Player> allPlayers
+    List<Player> allLivingInnocents
     {
         get
         {
-            return GameController.instance.players;
+            return GameController.instance.players.FindAll(player => GameController.instance.alive[player.playerID] && !player.isMurderer);
         }
     }
 	
@@ -17,16 +17,16 @@ public class ExitWings : MonoBehaviour {
 	void Update () {
 
         System.Predicate<Player> nearTheWings = player => Vector2.Distance(transform.position, player.transform.position) <= radius;
-        int numPresent = allPlayers.FindAll(player => nearTheWings(player) && !player.isMurderer).Count;
+        int numPresent = allLivingInnocents.FindAll(nearTheWings).Count;
 
-        if(numPresent >= allPlayers.Count - 1)
+        if(numPresent == allLivingInnocents.Count)
         {
             int numKeys = 0;
-            allPlayers.ForEach(player => numKeys += player.keysCollected);
+            allLivingInnocents.ForEach(player => numKeys += player.keysCollected);
             if(numKeys == 4)
             {
                 print("win!");
-                allPlayers.FindAll(player => !player.isMurderer).ForEach(player => player.isFree = true);
+                allLivingInnocents.ForEach(player => player.isFree = true);
                 Destroy(gameObject);
             }
         }
