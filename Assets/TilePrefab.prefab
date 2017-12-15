@@ -87,6 +87,7 @@ MonoBehaviour:
   wood: {fileID: 21300000, guid: eb56914fc1992304c883515b32d961d2, type: 3}
   metal: {fileID: 21300000, guid: 670c5d0ebd5eb6646b6ed16e6eb577bf, type: 3}
   wall: {fileID: 0}
+  blank: {fileID: 0}
 --- !u!212 &212255042212741848
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -101,7 +102,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a2f30878e2b668f4fa631a1897105239, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
