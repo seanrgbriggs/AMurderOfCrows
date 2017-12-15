@@ -6,7 +6,6 @@ public class RoomSpawner : MonoBehaviour {
 
     private enum TilePatternTemplate
     {
-        Any, Floor, Wall
         Any, Floor, Wall, Door
     }
 
@@ -110,7 +109,7 @@ public class RoomSpawner : MonoBehaviour {
         }
 
         for(int i = 0; i < 4; i++) {
-            Key key = Instantiate(GameController.instance.keyTemp, boids[NUM_PLAYERS + i].transform.position, Quaternion.identity);
+            Key key = Instantiate(GameController.instance.keyPrefab, boids[NUM_PLAYERS + i].transform.position, Quaternion.identity);
             key.GetComponent<SpriteRenderer>().sprite = GameController.instance.keySprites[i];
             key.keyID = i;
             GameController.instance.keys[i] = key;
@@ -218,7 +217,7 @@ public class RoomSpawner : MonoBehaviour {
                 }
             }
             spawnDoors();
-            removeExtraDoors();
+            RemoveExtraDoors();
         }
     }
 
@@ -250,8 +249,6 @@ public class RoomSpawner : MonoBehaviour {
                     List<Tile.TileType> types = new List<Tile.TileType>();
                     if(max-- > 0 && CheckPattern(threeByThreeVertical, i, j, out types))
                     {
-                    if (max-- > 0 && CheckPattern(threeByThreeVertical, i, j, out types)) {
-                        print(System.String.Concat(types.ToArray()));
                         tiles[i + 1, j + 1].UpdateTile(Tile.TileType.Door);
                         noDoorsBuilt = false;
                     }
@@ -260,12 +257,9 @@ public class RoomSpawner : MonoBehaviour {
         } while (!noDoorsBuilt && max-- > 0);
 
         //Store the original values of all tiles
-        tileManager.SetTiles();
         TileManager.instance.SetTiles();
 
         //Finally, clean up the boids
-        foreach(Boid b in FindObjectsOfType<Boid>())
-        {
         foreach (Boid b in FindObjectsOfType<Boid>()) {
             Destroy(b.gameObject);
         }
@@ -307,7 +301,7 @@ public class RoomSpawner : MonoBehaviour {
         return true;
     }
 
-    void removeExtraDoors() {
+    void RemoveExtraDoors() {
         TilePatternTemplate[] verticalFive = new TilePatternTemplate[5] {
             TilePatternTemplate.Door,
             TilePatternTemplate.Floor,
