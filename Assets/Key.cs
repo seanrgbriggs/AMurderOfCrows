@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Key : MonoBehaviour {
+    public int keyID;
 
 	// Use this for initialization
 	void Start () {

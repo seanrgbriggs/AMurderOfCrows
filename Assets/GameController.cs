@@ -16,6 +16,13 @@ public class GameController : MonoBehaviour {
     public List<Player> players;
     public int currentPlayerIndex = -1;
     public List<BoidColorTileMatch> colorTileDictionary;
+    public Key keyTemp;
+    public bool[] alive = { true, true, true, true };
+    //Sprites
+    public Sprite[] keySprites;
+
+    [HideInInspector]
+    public Key[] keys;
 
     public Player currentPlayer
     {
@@ -31,6 +38,7 @@ public class GameController : MonoBehaviour {
 
     void Awake() {
         instance = this;
+        keys = new Key[4];
     }
 
 	// Use this for initialization
@@ -41,19 +49,22 @@ public class GameController : MonoBehaviour {
             colorTileDictionary[i].boidType = boidTypes[randomIndex];
             boidTypes.RemoveAt(randomIndex);
         }
-
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
         if (GetComponent<RoomSpawner>().playersSpawned) {
+            if (!alive[currentPlayerIndex]) {
+                AdvanceTurn();
+                return;
+            }
 
             if (players[currentPlayerIndex].movePoints <= 0 || Input.GetKeyDown(KeyCode.Space)) {
                 AdvanceTurn();
             }
 
             Camera.main.transform.position = players[currentPlayerIndex].transform.position + new Vector3(0, 0, -10);
-            Camera.main.orthographicSize = 2.5F;
+            Camera.main.orthographicSize = 5;
         }
 	}
 

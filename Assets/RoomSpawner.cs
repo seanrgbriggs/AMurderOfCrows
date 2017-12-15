@@ -16,10 +16,6 @@ public class RoomSpawner : MonoBehaviour {
     float[,] coordinates;
     public bool playersSpawned = false;
     public Player playerTemp;
-    public Key keyTemp;
-
-    //Sprites
-    public Sprite[] keySprites;
 
     // Use this for initialization
     void Start () {
@@ -107,10 +103,14 @@ public class RoomSpawner : MonoBehaviour {
         }
 
         for(int i = 0; i < 4; i++) {
-            Key key = Instantiate(keyTemp, boids[NUM_PLAYERS + i].transform.position, Quaternion.identity);
-            key.GetComponent<SpriteRenderer>().sprite = keySprites[i];
+            Key key = Instantiate(GameController.instance.keyTemp, boids[NUM_PLAYERS + i].transform.position, Quaternion.identity);
+            key.GetComponent<SpriteRenderer>().sprite = GameController.instance.keySprites[i];
+            key.keyID = i;
+            GameController.instance.keys[i] = key;
         }
-        
+
+        int rand = Random.Range(0, 4);
+        GameController.instance.players[rand].isMurderer = true;
     }
 
 
@@ -204,11 +204,13 @@ public class RoomSpawner : MonoBehaviour {
                 }
 
                 if (!curRoom.canExpand) {
-                    foreach (Tile t in nextExpansion) {
-                        if (t.type == Tile.TileType.Grass) {
-                            t.UpdateTile(Tile.TileType.Wall);
+                    int rand = Mathf.RoundToInt(Random.Range(0, nextExpansion.Count));
+                    for (int m = 0; m < nextExpansion.Count; m++) {
+                        if (nextExpansion[m].type == Tile.TileType.Grass) {
+                            nextExpansion[m].UpdateTile(Tile.TileType.Wall);
                         }
                     }
+                    nextExpansion[rand].UpdateTile(Tile.TileType.Door);
                     roomsSpawned++;
                     continue;
                 }

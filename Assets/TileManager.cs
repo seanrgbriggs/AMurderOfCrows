@@ -45,7 +45,7 @@ public class TileManager : MonoBehaviour {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Tile.TileType type = tiles[i, j].type;
-                if (type != playerType && type != Tile.TileType.Wall) {
+                if (type != playerType && type != Tile.TileType.Wall && type != Tile.TileType.Door) {
                     tiles[i, j].UpdateTile(Tile.TileType.Blank);
                 }
             }

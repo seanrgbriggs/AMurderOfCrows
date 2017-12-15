@@ -1,10 +1,21 @@
 fileFormatVersion: 2
 guid: f8e59e0f4e47c3c44a940fddeaa2c046
-timeCreated: 1512536049
-licenseType: Pro
+timeCreated: 1513283697
+licenseType: Free
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - sr: {instanceID: 0}
+  - dirt: {instanceID: 0}
+  - grass: {instanceID: 0}
+  - cobble: {instanceID: 0}
+  - brick: {instanceID: 0}
+  - wood: {instanceID: 0}
+  - metal: {instanceID: 0}
+  - wall: {instanceID: 0}
+  - blank: {instanceID: 0}
+  - door: {fileID: 21300000, guid: d5c4154234f06f2488ac1c5fd18e8b38, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

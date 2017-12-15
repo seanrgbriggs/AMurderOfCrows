@@ -7,7 +7,7 @@ public class Tile : MonoBehaviour {
 
     public enum TileType
     {
-        Dirt, Grass, Cobblestone, Brick, Wood, Metal, Wall, Blank
+        Dirt, Grass, Cobblestone, Brick, Wood, Metal, Wall, Blank, Door
     }
 
     public TileType type;
@@ -21,6 +21,7 @@ public class Tile : MonoBehaviour {
     public Sprite metal;
     public Sprite wall;
     public Sprite blank;
+    public Sprite door;
 
 
     public bool isNavigable
@@ -55,7 +56,19 @@ public class Tile : MonoBehaviour {
     public void UpdateTile(TileType type)
     {
         this.type = type;
-        GetComponent<SpriteRenderer>().sprite = GameController.instance.getSpriteForTile(type);
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+        switch (type) {
+            case TileType.Door:
+                spriteRenderer.sprite = door;
+                break;
+            case TileType.Grass:
+                spriteRenderer.sprite = grass;
+                break;
+            default:
+                spriteRenderer.sprite = GameController.instance.getSpriteForTile(type);
+                break;
+        } 
         GetComponent<Collider2D>().enabled = type == TileType.Wall;
     }
 }
