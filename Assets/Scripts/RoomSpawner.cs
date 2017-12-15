@@ -7,6 +7,7 @@ public class RoomSpawner : MonoBehaviour {
     private enum TilePatternTemplate
     {
         Any, Floor, Wall
+        Any, Floor, Wall, Door
     }
 
     static float elapsed = 0;
@@ -216,26 +217,26 @@ public class RoomSpawner : MonoBehaviour {
                     }
                 }
             }
-
+            spawnDoors();
+            removeExtraDoors();
         }
+    }
 
+    void spawnDoors() {
         TilePatternTemplate[,] threeByThreeVertical = new TilePatternTemplate[3, 3] {
             { TilePatternTemplate.Any, TilePatternTemplate.Floor, TilePatternTemplate.Any },
             { TilePatternTemplate.Wall, TilePatternTemplate.Wall, TilePatternTemplate.Wall },
             { TilePatternTemplate.Any, TilePatternTemplate.Floor, TilePatternTemplate.Any}
             };
-        
+
         //Add Doors to the rooms, where there are two tiles on opposite sides of a 1x3 wall.
         bool noDoorsBuilt = true;
-        Tile[,] tiles = tileManager.tiles;
+        Tile[,] tiles = TileManager.instance.tiles;
         int max = 1000;
-        do
-        {
+        do {
             noDoorsBuilt = true;
-            for(int i = 1; i< tileManager.width - 1; i++)
-            {
-                for(int j= 0; j< tileManager.height - 3; j++)
-                {
+            for (int i = 1; i < TileManager.instance.width - 1; i++) {
+                for (int j = 0; j < TileManager.instance.height - 3; j++) {
                     //if(tiles[i,j].type != Tile.TileType.Wall
                     //    && tiles[i, j+2].type != Tile.TileType.Wall
                     //    && tiles[i, j+1].type == Tile.TileType.Wall
@@ -303,4 +304,69 @@ public class RoomSpawner : MonoBehaviour {
         return true;
     }
 
+    void removeExtraDoors() {
+        TilePatternTemplate[] verticalFive = new TilePatternTemplate[5] {
+            TilePatternTemplate.Door,
+            TilePatternTemplate.Floor,
+            TilePatternTemplate.Door,
+            TilePatternTemplate.Any,
+            TilePatternTemplate.Door
+        };
+
+        //Add Doors to the rooms, where there are two tiles on opposite sides of a 1x3 wall.
+        bool noDoorsBuilt = true;
+        Tile[,] tiles = TileManager.instance.tiles;
+        int max = 1000;
+        do {
+            noDoorsBuilt = true;
+            for (int i = 0; i < TileManager.instance.width; i++) {
+                for (int j = 0; j < TileManager.instance.height - 5; j++) {
+
+                    List<Tile.TileType> types = new List<Tile.TileType>();
+                    if (max-- > 0 && CheckDoorPattern(verticalFive, i, j, out types)) {
+                        print(System.String.Concat(types.ToArray()));
+                        tiles[i, j].UpdateTile(Tile.TileType.Wall);
+                        noDoorsBuilt = false;
+                    }
+                }
+            }
+        } while (!noDoorsBuilt && max-- > 0);
+
+        //Store the original values of all tiles
+        TileManager.instance.SetTiles();
+
+        //Finally, clean up the boids
+        foreach (Boid b in FindObjectsOfType<Boid>()) {
+            Destroy(b.gameObject);
+        }
+
+    }
+
+    private bool CheckDoorPattern(TilePatternTemplate[] pattern, int x, int y, out List<Tile.TileType> types) {
+        types = new List<Tile.TileType>();
+        TileManager tileManager = TileManager.instance;
+        for (int i = 0; i < pattern.GetLength(0); i++) {
+            if (x >= tileManager.tiles.GetLength(0) || 1 + y >= tileManager.tiles.GetLength(1)) {
+                return false;
+            }
+
+            Tile curTile = TileManager.instance.tiles[x, i + y];
+
+            if (curTile == null) {
+                return false;            }
+
+            types.Add(curTile.type);
+
+            switch (pattern[i]) {
+
+                case TilePatternTemplate.Any:
+                    continue;
+                case TilePatternTemplate.Door:
+                    if (!(curTile.type == Tile.TileType.Door))
+                        return false;
+                    break;
+            }
+        }
+        return true;
+    }
 }
