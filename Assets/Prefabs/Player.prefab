@@ -167,7 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lightRange: 5
   movePoints: 225
-  maxMovePoints: 225
+  maxMovePoints: 500
   playerID: 0
   keysCollected: 0
   isMurderer: 0

@@ -411,7 +411,7 @@ MonoBehaviour:
   width: 53
   height: 29
   delta: 1
-  shouldHideExternalTiles: 0
+  shouldHideExternalTiles: 1
 --- !u!4 &878820970
 Transform:
   m_ObjectHideFlags: 0
@@ -604,7 +604,7 @@ Light:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1731348794}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -249,16 +249,14 @@ public class RoomSpawner : MonoBehaviour {
 
         //Add Doors to the rooms, where there are two tiles on opposite sides of a 1x3 wall.
         Tile[,] tiles = TileManager.instance.tiles;
-        for (int i = 1; i < TileManager.instance.width - 1; i++)
-        {
-            for (int j = 0; j < TileManager.instance.height - 3; j++)
-            {
-                if (CheckPattern(threeByThreeVertical, i, j) && CheckPattern(threeByThreeHorizontal, i, j))
-                {
-                    tiles[i + 1, j + 1].UpdateTile(Tile.TileType.Door);
+            for (int i = 1; i < TileManager.instance.width - 1; i++) {
+                for (int j = 0; j < TileManager.instance.height - 3; j++) { 
+                    if(CheckPattern(threeByThreeVertical, i, j) || CheckPattern(threeByThreeHorizontal,i,j))
+                    {
+                        tiles[i + 1, j + 1].UpdateTile(Tile.TileType.Door);
+                    }
                 }
             }
-        }
 
         //Store the original values of all tiles
         TileManager.instance.SetTiles();
@@ -297,6 +295,10 @@ public class RoomSpawner : MonoBehaviour {
                         if (curTile.type == Tile.TileType.Wall || curTile.type == Tile.TileType.Door)
                             return false;
                         break;
+                    case TilePatternTemplate.Door:
+                        if (curTile.type != Tile.TileType.Door)
+                            return false;
+                        break;
                     case TilePatternTemplate.Wall:
                         if (curTile.type != Tile.TileType.Wall)
                             return false;
@@ -308,30 +310,81 @@ public class RoomSpawner : MonoBehaviour {
     }
 
     void RemoveExtraDoors() {
-        TilePatternTemplate[] verticalFive = new TilePatternTemplate[5] {
-            TilePatternTemplate.Door,
-            TilePatternTemplate.Floor,
+        TilePatternTemplate[,] verticalFive = new TilePatternTemplate[1,5] {
+            { TilePatternTemplate.Door,
+            TilePatternTemplate.Any,
             TilePatternTemplate.Door,
             TilePatternTemplate.Any,
-            TilePatternTemplate.Door
+            TilePatternTemplate.Door }
+        };
+
+        TilePatternTemplate[,] horizontalFive = new TilePatternTemplate[5, 1] {
+            { TilePatternTemplate.Door },
+            {TilePatternTemplate.Any },
+            {TilePatternTemplate.Door },
+            { TilePatternTemplate.Any },
+            { TilePatternTemplate.Door }
+        };
+
+        TilePatternTemplate[,] verticalDoubleDoors = new TilePatternTemplate[3, 3]
+        {
+            {TilePatternTemplate.Floor, TilePatternTemplate.Floor, TilePatternTemplate.Floor },
+            {TilePatternTemplate.Door, TilePatternTemplate.Wall, TilePatternTemplate.Door },
+            {TilePatternTemplate.Floor, TilePatternTemplate.Floor, TilePatternTemplate.Floor}
+        };
+
+        TilePatternTemplate[,] horizontalDoubleDoors = new TilePatternTemplate[3, 3]
+        {
+            {TilePatternTemplate.Floor, TilePatternTemplate.Door, TilePatternTemplate.Floor },
+            {TilePatternTemplate.Floor, TilePatternTemplate.Wall, TilePatternTemplate.Floor },
+            {TilePatternTemplate.Floor, TilePatternTemplate.Door, TilePatternTemplate.Floor}
         };
 
         //Add Doors to the rooms, where there are two tiles on opposite sides of a 1x3 wall.
-        bool noDoorsBuilt = true;
         Tile[,] tiles = TileManager.instance.tiles;
-        int max = 1000;
-        do {
-            noDoorsBuilt = true;
-            for (int i = 0; i < TileManager.instance.width; i++) {
-                for (int j = 0; j < TileManager.instance.height - 5; j++) {
+        for (int rescan = 0; rescan < 10; rescan++)
+        {
+            for (int i = 0; i < TileManager.instance.width; i++)
+            {
+                for (int j = 0; j < TileManager.instance.height; j++)
+                {
+                    List<Tile.TileType> data;
+                    if (CheckPattern(verticalFive, i, j))
+                    {
+                        tiles[i, j + 2].UpdateTile(Tile.TileType.Wall);
+                    }
+                    else if (CheckPattern(horizontalFive, i, j))
+                    {
+                        tiles[i + 2, j].UpdateTile(Tile.TileType.Wall);
+                    }
+                    else if (CheckPattern(verticalDoubleDoors, i, j, out data))
+                    {
 
-                    if (max-- > 0 && CheckDoorPattern(verticalFive, i, j)) {
-                        tiles[i, j].UpdateTile(Tile.TileType.Wall);
-                        noDoorsBuilt = false;
+                        TileManager.instance.tiles[i + 1, j - 1].UpdateTile(Tile.TileType.Wall);
+                        TileManager.instance.tiles[i + 1, j].UpdateTile(Tile.TileType.Wall);
+                        TileManager.instance.tiles[i + 1, j + 1].UpdateTile(Tile.TileType.Wall);
+
+                    }
+                    else if (CheckPattern(horizontalDoubleDoors, i, j))
+                    {
+
+                        tiles[i - 1, j + 1].UpdateTile(Tile.TileType.Wall);
+                        tiles[i, j + 1].UpdateTile(Tile.TileType.Wall);
+                        tiles[i + 1, j + 1].UpdateTile(Tile.TileType.Wall);
+                    }else if(tiles[i,j].type == Tile.TileType.Door)
+                    {
+                        int adjacentWalls = 0;
+                        new List<Tile>() { tiles[i - 1, j], tiles[i + 1, j], tiles[i, j - 1], tiles[i, j + 1] }
+                            .ForEach(tile => adjacentWalls += (tile.type == Tile.TileType.Wall) ? 1 : 0);
+                        if(adjacentWalls > 2)
+                        {
+                            tiles[i, j].UpdateTile(Tile.TileType.Wall);
+                        }
                     }
                 }
             }
-        } while (!noDoorsBuilt && max-- > 0);
+        }
+        
 
         //Store the original values of all tiles
         TileManager.instance.SetTiles();
@@ -342,38 +395,5 @@ public class RoomSpawner : MonoBehaviour {
         }
 
     }
-
-    private bool CheckDoorPattern(TilePatternTemplate[] pattern, int x, int y)
-    {
-        List<Tile.TileType> dataDump;
-        return CheckDoorPatternDB(pattern, x, y, out dataDump);
-    }
-
-    private bool CheckDoorPatternDB(TilePatternTemplate[] pattern, int x, int y, out List<Tile.TileType> types) {
-        types = new List<Tile.TileType>();
-        TileManager tileManager = TileManager.instance;
-        for (int i = 0; i < pattern.GetLength(0); i++) {
-            if (x >= tileManager.tiles.GetLength(0) || 1 + y >= tileManager.tiles.GetLength(1)) {
-                return false;
-            }
-
-            Tile curTile = TileManager.instance.tiles[x, i + y];
-
-            if (curTile == null) {
-                return false;            }
-
-            types.Add(curTile.type);
-
-            switch (pattern[i]) {
-
-                case TilePatternTemplate.Any:
-                    continue;
-                case TilePatternTemplate.Door:
-                    if (!(curTile.type == Tile.TileType.Door))
-                        return false;
-                    break;
-            }
-        }
-        return true;
-    }
+     
 }
